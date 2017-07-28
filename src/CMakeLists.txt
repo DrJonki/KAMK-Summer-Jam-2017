@@ -1,7 +1,18 @@
-set(DIR ${CMAKE_CURRENT_SOURCE_DIR})
+set(INCDIR ${CMAKE_SOURCE_DIR}/include/Jam)
+set(SRCDIR ${CMAKE_CURRENT_SOURCE_DIR})
 
+# Sources here
 set(SRC
-  ${DIR}/main.cpp
+  ${INCDIR}/Entity.hpp
+  ${SRCDIR}/Entity.cpp
+  ${INCDIR}/Instance.hpp
+  ${SRCDIR}/Instance.cpp
+  ${INCDIR}/Layer.hpp
+  ${SRCDIR}/Layer.cpp
+  ${INCDIR}/Scene.hpp
+  ${SRCDIR}/Scene.cpp
+
+  ${SRCDIR}/main.cpp
 )
 
 add_executable(Jam ${SRC})
