@@ -14,5 +14,10 @@ namespace jam
     void update(const float dt) override;
 
     void draw(sf::RenderTarget& target) override;
+
+  private:
+
+    float m_currentSpeed;
+    float m_jumpAccel;
   };
 }
