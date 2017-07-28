@@ -10,6 +10,8 @@ set(SRC
   ${SRCDIR}/Instance.cpp
   ${INCDIR}/ResourceManager.hpp
   ${SRCDIR}/ResourceManager.cpp
+  ${INCDIR}/AnimatedSprite.hpp
+  ${SRCDIR}/AnimatedSprite.cpp
   ${INCDIR}/Layer.hpp
   ${SRCDIR}/Layer.cpp
   ${INCDIR}/Scene.hpp
@@ -18,6 +20,8 @@ set(SRC
   # Entities
   ${INCDIR}/Entities/Player.hpp
   ${SRCDIR}/Entities/Player.cpp
+  ${INCDIR}/Entities/Bottle.hpp
+  ${SRCDIR}/Entities/Bottle.cpp
 
   # Scenes
   ${INCDIR}/Scenes/GameScene.hpp

@@ -1,15 +1,16 @@
 #pragma once
 
 #include <Jam/Entity.hpp>
-#include <SFML/Graphics.hpp>
+#include <Jam/AnimatedSprite.hpp>
 
 namespace jam
 {
-    class Bottle final : public Entity, public sf::Sprite
+    class Instance;
+    class Bottle final : public Entity, public AnimatedSprite
     {
     public:
 
-        Bottle();
+        Bottle(Instance& inst);
 
         void update(const float dt) override;
 

@@ -5,12 +5,12 @@
 
 namespace jam
 {
-    class AnimatedSprite
+    class AnimatedSprite : public sf::Sprite
     {
     public:
 
         AnimatedSprite(
-            const std::string& fileName,
+            sf::Texture& texture,
             int width,
             int height,
             int frames,
@@ -18,20 +18,20 @@ namespace jam
             int startFrame = 0
         );
         void update(const float dt);
-        void reset();
+        void resetAnimation();
         void setSpeed(float speed);
         float getSpeed();
-        float getWidth();
-        float getHeight();
 
     private:
-        sf::Sprite
         int m_frameWidth;
         int m_frameHeight;
         int m_curFrame;
         int m_startFrame;
+        int m_maxFrames;
         float m_frameSpeed;
         float m_startSpeed;
         float m_curTime;
+
+        void updateSprite();
     };
 }
