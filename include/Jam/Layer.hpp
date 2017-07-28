@@ -19,8 +19,8 @@ namespace jam
     ~Layer();
 
     template<typename T, typename ... Args>
-    Entity& insert(Args&&... args) {
-      static_assert(std::is_same<T, Entity>::value, "Not an entity");
+    T& insert(Args&&... args) {
+      static_assert(std::is_base_of<Entity, T>::value, "Not an entity");
       auto uniq = std::make_unique<T>(args...);
       auto& ref = *uniq;
       m_entities.emplace_back(std::move(uniq));

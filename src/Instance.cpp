@@ -8,8 +8,6 @@ namespace jam
     : window(sf::VideoMode(800, 600), "Jam")
   {
 
-
-    m_clock.restart(); // Remove initialization time
   }
 
   Instance::~Instance()
