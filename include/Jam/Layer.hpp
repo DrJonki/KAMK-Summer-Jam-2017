@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <Jam/Entity.hpp>
+#include <SFML/Graphics/View.hpp>
 
 namespace sf
 {
@@ -31,9 +32,14 @@ namespace jam
 
     void draw(sf::RenderTarget& target);
 
+    void setView(const sf::View& view);
+
+    sf::View getView() const;
+
   private:
 
     std::vector<std::unique_ptr<Entity>> m_entities;
+    sf::View m_view;
   };
 }
 

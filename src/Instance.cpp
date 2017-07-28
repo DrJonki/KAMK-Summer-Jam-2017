@@ -8,23 +8,26 @@ namespace jam
     : window(sf::VideoMode(800, 600), "Jam")
   {
 
+
+    m_clock.restart(); // Remove initialization time
   }
 
   Instance::~Instance()
   {}
 
-  void Instance::draw()
+  void Instance::loop()
   {
+    if (currentScene)
+      currentScene->update(m_clock.restart().asSeconds());
+
     window.clear();
 
     if (currentScene)
       currentScene->draw(window);
 
     window.display();
-  }
 
-  void Instance::handleEvents()
-  {
+    // Handle events
     sf::Event event;
     while (window.pollEvent(event)) {
       switch (event.type)

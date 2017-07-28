@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/System/Clock.hpp>
 #include <memory>
 
 namespace jam
@@ -15,14 +16,16 @@ namespace jam
 
     ~Instance();
 
-    void draw();
-
-    void handleEvents();
+    void loop();
 
   public:
 
     // Globals
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
+
+  private:
+
+    sf::Clock m_clock;
   };
 }

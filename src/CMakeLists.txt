@@ -3,6 +3,7 @@ set(SRCDIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Sources here
 set(SRC
+  # Core files
   ${INCDIR}/Entity.hpp
   ${SRCDIR}/Entity.cpp
   ${INCDIR}/Instance.hpp
@@ -11,6 +12,10 @@ set(SRC
   ${SRCDIR}/Layer.cpp
   ${INCDIR}/Scene.hpp
   ${SRCDIR}/Scene.cpp
+
+  # Scenes
+  ${INCDIR}/Scenes/GameScene.hpp
+  ${SRCDIR}/Scenes/GameScene.cpp
 
   ${SRCDIR}/main.cpp
 )
@@ -37,7 +42,7 @@ if (MSVC)
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-main.lib
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-system-s.lib
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-window-s.lib
-   )
+  )
 
   target_link_libraries(Jam
     # SFML dependencies
