@@ -14,9 +14,9 @@ namespace jam
   void Player::update(const float dt)
   {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-      move(-100.f * dt, 0.f);
+      move(-500.f * dt, 0.f);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-      move(100.f * dt, 0.f);
+      move(500.f * dt, 0.f);
   }
 
   void Player::draw(sf::RenderTarget& target)

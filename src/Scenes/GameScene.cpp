@@ -26,11 +26,13 @@ namespace jam
     // Background sprites
     for (int i = -1; i < 10; ++i) {
       auto& spr = m_backgroundLayer.insert<BackgroundSprite>("Background-" + std::to_string(i), ins);
-      spr.setPosition(static_cast<float>(i * ins.window.getSize().x), 0.f);
+      spr.setPosition(static_cast<float>(i * static_cast<int>(ins.window.getSize().x)), 0.f);
     }
 
     // Player
     m_player = &m_gameLayer.insert<Player>("Player");
+    m_player->setOrigin(0.f, m_player->getSize().y);
+    m_player->setPosition(0.f, getView().getSize().y - m_player->getSize().y);
   }
 
   void GameScene::update(const float dt)
