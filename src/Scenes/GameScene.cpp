@@ -1,5 +1,6 @@
 #include <Jam/Scenes/GameScene.hpp>
 #include <Jam/Layer.hpp>
+#include <Jam/Instance.hpp>
 #include <Jam/Entities/Player.hpp>
 
 namespace jam

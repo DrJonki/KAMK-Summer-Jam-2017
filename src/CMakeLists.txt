@@ -8,6 +8,8 @@ set(SRC
   ${SRCDIR}/Entity.cpp
   ${INCDIR}/Instance.hpp
   ${SRCDIR}/Instance.cpp
+  ${INCDIR}/ResourceManager.hpp
+  ${SRCDIR}/ResourceManager.cpp
   ${INCDIR}/Layer.hpp
   ${SRCDIR}/Layer.cpp
   ${INCDIR}/Scene.hpp

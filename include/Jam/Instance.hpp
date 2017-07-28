@@ -3,6 +3,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/System/Clock.hpp>
 #include <memory>
+#include <Jam/ResourceManager.hpp>
 
 namespace jam
 {
@@ -23,6 +24,7 @@ namespace jam
     // Globals
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
+	ResourceManager resourceManager;
 
   private:
 
