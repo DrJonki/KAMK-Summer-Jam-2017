@@ -13,12 +13,22 @@ if (MSVC)
   ExternalProject_Get_Property(SFML BINARY_DIR)
   target_link_libraries(Jam
     # SFML libs
-    ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-audio-s-d.lib
-    ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-graphics-s-d.lib
-    ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-main-d.lib
-    ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-system-s-d.lib
-    ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-window-s-d.lib
+    debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-audio-s-d.lib
+    debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-graphics-s-d.lib
+    debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-main-d.lib
+    debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-system-s-d.lib
+    debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-window-s-d.lib
+  )
+  target_link_libraries(Jam
+    # SFML libs
+    optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-audio-s.lib
+    optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-graphics-s.lib
+    optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-main.lib
+    optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-system-s.lib
+    optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-window-s.lib
+   )
 
+  target_link_libraries(Jam
     # SFML dependencies
     ${SOURCE_DIR}/extlibs/libs-msvc-universal/x86/flac.lib
     ${SOURCE_DIR}/extlibs/libs-msvc-universal/x86/freetype.lib

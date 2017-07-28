@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.6.0)
 
-set(CMAKE_BUILD_TYPE "Debug" CACHE STRING "Type of build")
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release")
+set(CMAKE_BUILD_TYPE "Release")
 
 project(ProjectName)
 
