@@ -3,44 +3,44 @@
 #include <cassert>
 
 namespace jam {
-	sf::Texture& ResourceManager::GetTexture(const std::string& filePath)
-	{
-		std::string assetPath = "assets/Textures/" + filePath;
-		if (textureFiles.find(assetPath) == textureFiles.end()) {
-			std::cout << "Loading " + assetPath + "..." << std::endl;
-			sf::Texture& texture = textureFiles[assetPath];
-			if (!texture.loadFromFile(assetPath))
-			{
-				assert(false);
-			}
-			std::cout << "Loading " + assetPath + " complete!" << std::endl;
-			return texture;
-		}
-	}
+  sf::Texture& ResourceManager::GetTexture(const std::string& filePath)
+  {
+    std::string assetPath = "assets/Textures/" + filePath;
+    if (textureFiles.find(assetPath) == textureFiles.end()) {
+      std::cout << "Loading " + assetPath + "..." << std::endl;
+      sf::Texture& texture = textureFiles[assetPath];
+      if (!texture.loadFromFile(assetPath))
+      {
+        assert(false);
+      }
+      std::cout << "Loading " + assetPath + " complete!" << std::endl;
+      return texture;
+    }
+  }
 
-	sf::SoundBuffer& ResourceManager::GetSoundBuffer(const std::string& filePath)
-	{
-		std::string assetPath = "assets/Audio/" + filePath;
-		std::cout << "Loading " + assetPath + "..." << std::endl;
-		sf::SoundBuffer& soundBuff = audioFiles[assetPath];
-		if (!soundBuff.loadFromFile(assetPath))
-		{
-			assert(false);
-		}
-		std::cout << "Loading " + assetPath + " complete!" << std::endl;
-		return soundBuff;
-	}
+  sf::SoundBuffer& ResourceManager::GetSoundBuffer(const std::string& filePath)
+  {
+    std::string assetPath = "assets/Audio/" + filePath;
+    std::cout << "Loading " + assetPath + "..." << std::endl;
+    sf::SoundBuffer& soundBuff = audioFiles[assetPath];
+    if (!soundBuff.loadFromFile(assetPath))
+    {
+      assert(false);
+    }
+    std::cout << "Loading " + assetPath + " complete!" << std::endl;
+    return soundBuff;
+  }
 
-	sf::Font& ResourceManager::GetFont(const std::string& filePath)
-	{
-		std::string assetPath = "assets/Fonts/" + filePath;
-		std::cout << "Loading " + assetPath + "..." << std::endl;
-		sf::Font font = fontFiles[assetPath];
-		if (!font.loadFromFile(assetPath))
-		{
-			assert(false);
-		}
-		std::cout << "Loading " + assetPath + " complete!" << std::endl;
-		return font;
-	}
+  sf::Font& ResourceManager::GetFont(const std::string& filePath)
+  {
+    std::string assetPath = "assets/Fonts/" + filePath;
+    std::cout << "Loading " + assetPath + "..." << std::endl;
+    sf::Font font = fontFiles[assetPath];
+    if (!font.loadFromFile(assetPath))
+    {
+      assert(false);
+    }
+    std::cout << "Loading " + assetPath + " complete!" << std::endl;
+    return font;
+  }
 }
