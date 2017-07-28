@@ -24,7 +24,7 @@ namespace jam
     // Globals
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
-	ResourceManager resourceManager;
+    ResourceManager resourceManager;
 
   private:
 
