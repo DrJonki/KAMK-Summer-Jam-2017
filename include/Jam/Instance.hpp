@@ -4,6 +4,7 @@
 #include <SFML/System/Clock.hpp>
 #include <memory>
 #include <Jam/ResourceManager.hpp>
+#include <Jam/ConfigManager.hpp>
 
 namespace jam
 {
@@ -28,6 +29,7 @@ namespace jam
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
     ResourceManager resourceManager;
+    ConfigManager config;
 
   private:
 

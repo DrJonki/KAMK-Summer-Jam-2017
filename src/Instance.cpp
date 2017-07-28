@@ -7,7 +7,7 @@ namespace jam
   Instance::Instance()
     : window(sf::VideoMode(800, 600), "Jam")
   {
-
+    auto asdf = config.boolean("bool");
   }
 
   Instance::~Instance()
