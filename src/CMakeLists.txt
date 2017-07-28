@@ -40,10 +40,16 @@ add_custom_command(TARGET Jam POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy
           ${SOURCE_DIR}/extlibs/bin/x86/openal32.dll
           ${CMAKE_CURRENT_BINARY_DIR}/openal32.dll
+
+  COMMAND ${CMAKE_COMMAND} -E copy
+          ${SOURCE_DIR}/extlibs/bin/x86/openal32.dll
           ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/openal32.dll
 
   COMMAND ${CMAKE_COMMAND} -E copy_directory
           ${CMAKE_SOURCE_DIR}/assets
-          ${CMAKE_CURRENT_BINARY_DIR}/assets
           ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_CFG_INTDIR}/assets
+
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+          ${CMAKE_SOURCE_DIR}/assets
+          ${CMAKE_CURRENT_BINARY_DIR}/assets
 )
