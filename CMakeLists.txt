@@ -20,7 +20,10 @@ ExternalProject_Add(SFML
 )
 
 ExternalProject_Get_Property(SFML SOURCE_DIR)
-include_directories(${SOURCE_DIR}/include)
+include_directories(
+  ${CMAKE_SOURCE_DIR}/include
+  ${SOURCE_DIR}/include
+)
 
 add_subdirectory(src)
 
