@@ -8,6 +8,8 @@ set(SRC
   ${SRCDIR}/Entity.cpp
   ${INCDIR}/Instance.hpp
   ${SRCDIR}/Instance.cpp
+  ${INCDIR}/ConfigManager.hpp
+  ${SRCDIR}/ConfigManager.cpp
   ${INCDIR}/ResourceManager.hpp
   ${SRCDIR}/ResourceManager.cpp
   ${INCDIR}/Layer.hpp
@@ -16,6 +18,8 @@ set(SRC
   ${SRCDIR}/Scene.cpp
 
   # Entities
+  ${INCDIR}/Entities/BackgroundSprite.hpp
+  ${SRCDIR}/Entities/BackgroundSprite.cpp
   ${INCDIR}/Entities/Player.hpp
   ${SRCDIR}/Entities/Player.cpp
 
