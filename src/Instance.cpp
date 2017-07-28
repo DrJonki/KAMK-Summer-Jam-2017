@@ -13,7 +13,7 @@ namespace jam
   Instance::~Instance()
   {}
 
-  void Instance::loop()
+  void Instance::operator ()()
   {
     if (currentScene)
       currentScene->update(m_clock.restart().asSeconds());

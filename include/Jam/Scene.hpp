@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <map>
+#include <SFML/Graphics/View.hpp>
 
 namespace sf
 {
@@ -30,9 +31,14 @@ namespace jam
 
     Instance& getInstance();
 
+    void setView(const sf::View& view);
+
+    const sf::View& getView() const;
+
   private:
 
     Instance& m_instance;
     std::multimap<uint32_t, std::unique_ptr<Layer>> m_layers;
+    sf::View m_view;
   };
 }

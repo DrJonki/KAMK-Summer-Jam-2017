@@ -11,13 +11,16 @@ namespace jam
 
   class Instance final
   {
+    Instance(const Instance&) = delete;
+    void operator =(const Instance&) = delete;
+
   public:
 
     Instance();
 
     ~Instance();
 
-    void loop();
+    void operator ()();
 
   public:
 
