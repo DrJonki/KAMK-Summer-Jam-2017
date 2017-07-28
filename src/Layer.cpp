@@ -19,4 +19,14 @@ namespace jam
       i->draw(target);
     }
   }
+
+  void Layer::setView(const sf::View& view)
+  {
+    m_view = view;
+  }
+
+  sf::View Layer::getView() const
+  {
+    return m_view;
+  }
 }

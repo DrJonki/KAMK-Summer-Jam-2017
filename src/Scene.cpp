@@ -33,4 +33,9 @@ namespace jam
       i.second->draw(target);
     }
   }
+
+  Instance& Scene::getInstance()
+  {
+    return m_instance;
+  }
 }

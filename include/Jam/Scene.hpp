@@ -28,6 +28,8 @@ namespace jam
 
     virtual void draw(sf::RenderTarget& target);
 
+    Instance& getInstance();
+
   private:
 
     Instance& m_instance;

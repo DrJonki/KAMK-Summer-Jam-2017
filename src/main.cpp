@@ -1,12 +1,14 @@
 #include <iostream>
 #include <Jam/Instance.hpp>
+#include <Jam/Scenes/GameScene.hpp>
 
 int main() {
   jam::Instance instance;
 
+  instance.currentScene = std::make_unique<jam::GameScene>(instance);
+
   while (instance.window.isOpen()) {
-    instance.draw();
-    instance.handleEvents();
+    instance.loop();
   }
 
   return 0;
