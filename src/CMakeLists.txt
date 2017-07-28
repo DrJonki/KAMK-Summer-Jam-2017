@@ -15,6 +15,10 @@ set(SRC
   ${INCDIR}/Scene.hpp
   ${SRCDIR}/Scene.cpp
 
+  # Entities
+  ${INCDIR}/Entities/Player.hpp
+  ${SRCDIR}/Entities/Player.cpp
+
   # Scenes
   ${INCDIR}/Scenes/GameScene.hpp
   ${SRCDIR}/Scenes/GameScene.cpp

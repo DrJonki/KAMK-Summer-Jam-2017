@@ -1,12 +1,15 @@
 #include <Jam/Scenes/GameScene.hpp>
+#include <Jam/Layer.hpp>
 #include <Jam/Instance.hpp>
+#include <Jam/Entities/Player.hpp>
 
 namespace jam
 {
   GameScene::GameScene(Instance& ins)
-    : Scene(ins)
+    : Scene(ins),
+      m_gameLayer(addLayer(100))
   {
-	  // sf::Texture testText = ins.resourceManager.GetTexture("test.png");
+    m_gameLayer.insert<Player>();
   }
 
   void GameScene::update(const float dt)

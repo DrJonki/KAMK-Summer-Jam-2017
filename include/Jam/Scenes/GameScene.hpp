@@ -14,6 +14,6 @@ namespace jam
 
   private:
 
-
+    Layer& m_gameLayer;
   };
 }
