@@ -45,5 +45,6 @@ namespace jam
     sf::Sound m_bottleSound;
     sf::Sound m_runSound;
     sf::Sound m_finalJumpSound;
+    sf::Sound m_ouchSound;
   };
 }

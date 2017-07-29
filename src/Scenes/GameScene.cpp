@@ -145,13 +145,20 @@ namespace jam
 
     // Center camera on player
     auto view = getView();
-    view.setCenter(
+    const auto current = glm::vec2(view.getCenter().x, view.getCenter().y);
+    const auto target = glm::vec2(
       m_player->getPosition().x,
       std::min(
         conf.float_("VIEW_Y") * 0.5f,
         m_player->getPosition().y
       )
     );
+    const auto result = glm::mix(
+      glm::vec2(current),
+      target,
+      dt * 45.f
+    );
+    view.setCenter(result.x, result.y);
     setView(view);
 
     // Update background positions
