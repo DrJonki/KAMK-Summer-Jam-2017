@@ -30,15 +30,29 @@ namespace jam
         ins, // instance
         "Particles/stepcloud.png", // texturePath
         sf::Vector2f(50, 50), // textureSize
-        10, // maxParticles
+        3, // maxParticles
         0.02f, // emitTime (if (x < 0.f) it is set to be forever
-        0.50f, // lifeTime
-        0.015f, // startspeed
-        50.f, // friction
+        1.f, // lifeTime
+        0.05f, // startspeed
+        0.025f, // friction
         0.f, // startAngle
         0.f, // startTorgue
         100.f, // maxAlpha
         0.f // minAlpha
+      ),
+      m_bottleParticle(
+        ins,
+        "Particles/beersplash.png",
+        sf::Vector2f(25, 25),
+        5,
+        0.1f,
+        0.50f,
+        0.015f,
+        0.1f,
+        0.f,
+        1.f,
+        100.f,
+        0.f
       ),
       m_bottleSound(ins.resourceManager.GetSoundBuffer("Yeah.wav"))
   {
@@ -51,6 +65,7 @@ namespace jam
 
     // Run particle
     m_runParticle.setPosition(getPosition());
+    m_bottleParticle.setPosition(getPosition());
   }
 
   void Player::update(const float dt)
@@ -59,6 +74,7 @@ namespace jam
 
     AnimatedSprite::update(dt);
     m_runParticle.update(dt);
+    m_bottleParticle.update(dt);
 
     static const auto gravity = m_instance.config.float_("GRAVITY");
     static const auto ground = m_instance.config.float_("GROUND_LEVEL");
@@ -74,18 +90,18 @@ namespace jam
 
       if (getPosition().y >= viewY - ground - 1.f) {
         m_currentSpeed.y = 0.f;
-      // jump land effect
-      if (m_jumpPressed)
-      {
-        m_runParticle.emit();
-        m_jumpPressed = false;
-      }
-      // jump input
+        // jump land effect
+        if (m_jumpPressed)
+        {
+          m_runParticle.emit();
+          m_jumpPressed = false;
+        }
+        // jump input
         if (Keyboard::isKeyPressed(Keyboard::Space))
-      {
+        {
           m_currentSpeed.y = -jumpForce;
-        m_jumpPressed = true;
-      }
+          m_jumpPressed = true;
+        }
       }
       break;
     }
@@ -106,18 +122,26 @@ namespace jam
     move(m_currentSpeed * dt);
     setPosition(getPosition().x, std::min(viewY - ground, getPosition().y));
     m_runParticle.setPosition(getPosition());
+    m_bottleParticle.setPosition(
+      sf::Vector2f(
+        getPosition().x + getLocalBounds().width * 2,
+        getPosition().y - getLocalBounds().height * 2
+      )
+    );
   }
 
   void Player::draw(sf::RenderTarget& target)
   {
     target.draw(*this);
     m_runParticle.draw(target);
+    m_bottleParticle.draw(target);
   }
 
   bool Player::collide(Bottle& bottle)
   {
     if (bottle.getGlobalBounds().intersects(getGlobalBounds())) {
       bottle.setActive(false);
+      m_bottleParticle.emit();
       float pitch = 1 + (m_random(-0.3f, 0.3f));
       m_bottleSound.setPitch(pitch);
       m_bottleSound.play();

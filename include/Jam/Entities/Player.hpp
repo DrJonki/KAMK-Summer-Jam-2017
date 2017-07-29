@@ -35,9 +35,10 @@ namespace jam
     Instance& m_instance;
     GameScene& m_scene;
     sf::Vector2f m_currentSpeed;
+    ParticleEmitter m_bottleParticle;
+    ParticleEmitter m_runParticle;
 
     // Soundsource
-    ParticleEmitter m_runParticle;
     bool m_jumpPressed;
     sf::Sound m_bottleSound;
     sf::Sound m_runSound;
