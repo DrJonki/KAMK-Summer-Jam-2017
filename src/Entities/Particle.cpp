@@ -10,18 +10,15 @@ namespace jam {
     float endSpeed,
     float startAngle,
     float startTorgue
-  ) 
+  ) : m_width(width),
+    m_height(height),
+    m_startSpeed(startSpeed),
+    m_endSpeed(endSpeed),
+    m_curSpeed(startSpeed),
+    m_curTime(0.f),
+    m_lifeTime(lifetime)
   {
     setTexture(texture);
-    m_width = width;
-    m_height = height;
-
-    m_startSpeed = startSpeed;
-    m_endSpeed = endSpeed;
-    m_curSpeed = startSpeed;
-
-    m_curTime = 0.f;
-    m_lifeTime = lifetime;
   }
 
   void Particle::update(const float dt)
@@ -39,7 +36,10 @@ namespace jam {
 
   void Particle::moveParticle(const float dt)
   {
-    // make it move here
+    auto direction = sf::Vector2f(1, -1);
+    auto moveVelocity = direction * m_curSpeed;
+    move(moveVelocity);
+    rotate(1.f);
   }
 
 }

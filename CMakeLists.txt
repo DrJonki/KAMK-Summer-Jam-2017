@@ -6,6 +6,17 @@ project(ProjectName)
 
 include(ExternalProject)
 
+ExternalProject_Add(GLM
+  GIT_REPOSITORY https://github.com/g-truc/glm.git
+  GIT_TAG master
+
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  INSTALL_COMMAND ""
+)
+ExternalProject_Get_Property(GLM SOURCE_DIR)
+include_directories(${SOURCE_DIR})
+
 ExternalProject_Add(SFML
   GIT_REPOSITORY https://github.com/SFML/SFML.git
   GIT_TAG master
@@ -18,13 +29,10 @@ ExternalProject_Add(SFML
              -DBUILD_SHARED_LIBS=OFF
              -DSFML_BUILD_NETWORK=OFF
 )
-
 ExternalProject_Get_Property(SFML SOURCE_DIR)
-include_directories(
-  ${CMAKE_SOURCE_DIR}/include
-  ${SOURCE_DIR}/include
-)
+include_directories(${SOURCE_DIR}/include)
 
+include_directories(${CMAKE_SOURCE_DIR}/include)
 add_subdirectory(src)
 
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT "Jam")

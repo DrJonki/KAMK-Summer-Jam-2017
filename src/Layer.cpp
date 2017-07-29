@@ -18,7 +18,7 @@ namespace jam
   void Layer::update(const float dt)
   {
     for (auto& i : m_entities) {
-      i.second->update(dt);
+      i.second->baseUpdate(dt);
     }
   }
 
@@ -26,7 +26,7 @@ namespace jam
   {
     for (auto& i : m_entities) {
       target.setView(m_sharedView ? *m_sharedView : m_view);
-      i.second->draw(target);
+      i.second->baseDraw(target);
     }
   }
 
@@ -48,5 +48,33 @@ namespace jam
   const sf::View* Layer::getSharedView() const
   {
     return m_sharedView;
+  }
+
+  Entity* Layer::get(const std::string& name) const
+  {
+    auto itr = m_entities.find(name);
+    if (itr != m_entities.end())
+      return itr->second.get();
+
+    return nullptr;
+  }
+
+  std::vector<Entity*> Layer::getAll(const std::string& name) const
+  {
+    auto range = m_entities.equal_range(name);
+    std::vector<Entity*> entities;
+    for (auto itr = range.first; itr != range.second; ++itr) {
+      entities.push_back(itr->second.get());
+    }
+    return entities;
+  }
+
+  std::vector<Entity*> Layer::getAll() const
+  {
+    std::vector<Entity*> entities;
+    for (auto& i : m_entities) {
+      entities.push_back(i.second.get());
+    }
+    return entities;
   }
 }

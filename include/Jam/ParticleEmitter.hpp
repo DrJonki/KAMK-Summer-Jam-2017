@@ -17,7 +17,12 @@ namespace jam
       std::string texturePath,
       sf::Vector2f textureSize,
       int maxParticles,
-      float emitTime
+      float emitTime,
+      float lifetime = 1.f,
+      float startSpeed = 2.f,
+      float endSpeed = 0.f,
+      float startAngle = 20.f,
+      float startTorgue = 20.f
     );
 
     void update(const float dt) override;
@@ -31,6 +36,11 @@ namespace jam
     sf::Vector2f m_textureSize;
     float m_emitTime;
     float m_curTime;
+    float m_lifetime;
+    float m_startSpeed;
+    float m_endSpeed;
+    float m_startAngle;
+    float m_startTorgue;
 
 
   };

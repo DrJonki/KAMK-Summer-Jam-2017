@@ -8,8 +8,20 @@ namespace jam
     std::string texturePath,
     sf::Vector2f textureSize,
     int maxParticles,
-    float emitTime
-  ) : m_texture(inst.resourceManager.GetTexture(texturePath))
+    float emitTime,
+    float lifetime,
+    float startSpeed,
+    float endSpeed,
+    float startAngle,
+    float startTorgue
+  ) : m_texture(inst.resourceManager.GetTexture(texturePath)),
+    m_emitTime(emitTime),
+    m_curTime(0.f),
+    m_lifetime(lifetime),
+    m_startSpeed(startSpeed),
+    m_endSpeed(endSpeed),
+    m_startAngle(startAngle),
+    m_startTorgue(startTorgue)
   {
     m_textureSize = textureSize;
     m_particles.reserve(maxParticles);
@@ -24,7 +36,16 @@ namespace jam
 
     if (m_particles.size() < m_particles.capacity())
     {
-      m_particles.push_back(Particle(m_texture, m_textureSize.x, m_textureSize.y));
+      m_particles.push_back(Particle(
+        m_texture,
+        m_textureSize.x,
+        m_textureSize.y,
+        m_emitTime,
+        m_startSpeed,
+        m_endSpeed,
+        m_startAngle,
+        m_startTorgue
+      ));
     }
 
     for (auto& particle : m_particles) {

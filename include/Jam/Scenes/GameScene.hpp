@@ -6,6 +6,7 @@ namespace jam
 {
   class Player;
   class ParticleEmitter;
+  class BackgroundSprite;
 
   class GameScene : public Scene
   {

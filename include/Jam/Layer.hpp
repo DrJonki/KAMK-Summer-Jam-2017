@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <unordered_map>
 #include <Jam/Entity.hpp>
 #include <SFML/Graphics/View.hpp>
@@ -29,6 +30,12 @@ namespace jam
 
       return ref;
     }
+
+    Entity* get(const std::string& name) const;
+
+    std::vector<Entity*> getAll(const std::string& name) const;
+
+    std::vector<Entity*> getAll() const;
 
     void update(const float dt);
 
