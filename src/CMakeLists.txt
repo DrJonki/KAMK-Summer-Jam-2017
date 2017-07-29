@@ -74,6 +74,8 @@ if (MSVC)
     winmm.lib
     gdi32.lib
   )
+
+  set_target_properties(Jam PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
 endif()
 
 add_custom_command(TARGET Jam POST_BUILD

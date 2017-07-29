@@ -11,7 +11,7 @@ namespace jam
   {
   public:
 
-    BackgroundSprite(Instance& ins);
+    BackgroundSprite(Instance& ins, const std::string& texture);
 
     void update(const float dt) override;
 

@@ -16,14 +16,16 @@ namespace jam
 
   void Player::update(const float dt)
   {
-    /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-      move(-500.f * dt, 0.f);
+    const float speed = 1000.f * dt;
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+      move(-speed, 0.f);
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-      move(500.f * dt, 0.f);*/
-
-
-    move(m_currentSpeed * dt, 0.f);
-
+      move(speed, 0.f);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+      move(0.f, -speed);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+      move(0.f, speed);
   }
 
   void Player::draw(sf::RenderTarget& target)
