@@ -18,8 +18,6 @@ namespace jam
 
     bool success() const;
 
-    void setPromptKey(const sf::Keyboard::Key key);
-
     sf::Keyboard::Key promptKey() const;
 
   private:
@@ -28,8 +26,8 @@ namespace jam
 
     void draw(sf::RenderTarget& target) override;
 
+    sf::Keyboard::Key m_key;
     sf::Sprite m_indicator;
     bool m_success;
-    sf::Keyboard::Key m_key;
   };
 }
