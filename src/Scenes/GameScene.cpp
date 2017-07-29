@@ -25,11 +25,32 @@ namespace jam
     m_gameLayer.setSharedView(&getView());
 
     // Background sprites
-    for (int i = -1; i < 10; ++i) {
-      auto& spr = m_backgroundLayer.insert<BackgroundSprite>("Background-" + std::to_string(i), ins);
-      spr.setPosition(static_cast<float>(i * static_cast<int>(ins.window.getSize().x)), 0.f);
-
-
+    // Sky
+    //
+    // ¤ ¤
+    // ¤ ¤
+    //
+    for (std::size_t i = 0; i < 4; ++i) {
+      const char* names[] = {
+        "tl", // Top-Left
+        "tr", // Top-Right
+        "bl", // Bottom-Left
+        "br", // Bottom-Right
+      };
+      m_backgroundLayer.insert<BackgroundSprite>("bg-sky-" + std::string(names[i]), ins);
+    }
+    // Ground
+    //
+    // ¤ ¤  ¤ ¤
+    //
+    for (std::size_t i = 0; i < 4; ++i) {
+      const char* names[] = {
+        "beach-l",
+        "beack-r",
+        "water-l",
+        "water-r",
+      };
+      m_backgroundLayer.insert<BackgroundSprite>("bg-" + std::string(names[i]), ins);
     }
 
     // Player
@@ -42,8 +63,19 @@ namespace jam
   {
     Scene::update(dt);
 
+    // Center camera on player
     auto view = getView();
     view.setCenter(m_player->getPosition().x, view.getCenter().y);
     setView(view);
+
+    enum {
+      Ground,
+      Middle,
+      Water,
+    };
+
+    // Update background positions
+    const auto currentStageX = static_cast<unsigned int>(m_player->getPosition().x / (getInstance().config.float_("VIEW_X")));
+    // const auto currentStageY = 
   }
 }

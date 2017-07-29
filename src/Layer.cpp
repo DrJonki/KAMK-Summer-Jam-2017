@@ -49,4 +49,23 @@ namespace jam
   {
     return m_sharedView;
   }
+
+  Entity* Layer::get(const std::string& name) const
+  {
+    auto itr = m_entities.find(name);
+    if (itr != m_entities.end())
+      return itr->second.get();
+
+    return nullptr;
+  }
+
+  std::vector<Entity*> Layer::getAll(const std::string& name) const
+  {
+    auto range = m_entities.equal_range(name);
+    std::vector<Entity*> entities;
+    for (auto itr = range.first; itr != range.second; ++itr) {
+      entities.push_back(itr->second.get());
+    }
+    return entities;
+  }
 }

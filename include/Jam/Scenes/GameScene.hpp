@@ -9,17 +9,6 @@ namespace jam
 
   class GameScene : public Scene
   {
-  private:
-
-    enum {
-      BG_TOPLEFT,
-      BG_TOPRIGHT,
-      BG_BOTTOMLEFT,
-      BG_BOTTOMRIGHT,
-
-      __BG_COUNT,
-    };
-
   public:
 
     GameScene(Instance& ins);
@@ -34,6 +23,5 @@ namespace jam
 
     // Entities
     Player* m_player;
-    BackgroundSprite* m_background[__BG_COUNT];
   };
 }

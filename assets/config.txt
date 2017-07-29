@@ -4,5 +4,9 @@ VIEW_Y=600
 # Game
 SPEED_MULT=1.0
 
-# Physics
+# Level
 GROUND_LEVEL=50
+GROUND_AMOUNT=10
+
+# Physics
+PLAYER_INIT_SPEED=250
