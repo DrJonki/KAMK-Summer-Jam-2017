@@ -126,7 +126,26 @@ namespace jam
       }
     }
 
+<<<<<<< HEAD
+    // Particle
+    m_particleEmitter = &m_particleLayer.insert<ParticleEmitter>(
+      "ParticleEmitter01",
+      ins, // instance
+      "test.png", // texturePath
+      sf::Vector2f(50, 50), // textureSize
+      100, // maxParticles
+      20.f, // emitTime
+      10.f, // lifeTime
+      0.15f, // startspeed
+      100.f, // friction
+      0.f, // startAngle
+      0.25f // startTorgue
+    );
+
     m_player = &m_gameLayer.insert<Player>("Player", ins, *this);
+=======
+    m_player = &m_gameLayer.insert<Player>("Player", ins);
+>>>>>>> 343d44fca3075ea793eb17ce8de399ab0b87db26
     m_player->setOrigin(m_player->getLocalBounds().width * 0.5f, m_player->getLocalBounds().height);
     m_player->setPosition(0.f, groundLevel);
 
