@@ -43,7 +43,7 @@ namespace jam {
         auto itr = fontFiles.find(assetPath);
         if (itr == fontFiles.end()) {
             std::cout << "Loading " + assetPath + "..." << std::endl;
-            sf::Font font = fontFiles[assetPath];
+            sf::Font& font = fontFiles[assetPath];
             if (!font.loadFromFile(assetPath))
             {
                 assert(false);

@@ -5,11 +5,13 @@
 
 namespace jam
 {
-  class Player final : public Entity, public sf::RectangleShape
+  class Instance;
+
+  class BackgroundSprite : public Entity, public sf::RectangleShape
   {
   public:
 
-    Player();
+    BackgroundSprite(Instance& ins);
 
     void update(const float dt) override;
 
@@ -17,7 +19,6 @@ namespace jam
 
   private:
 
-    float m_currentSpeed;
-    float m_jumpAccel;
+
   };
 }

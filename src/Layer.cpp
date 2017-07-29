@@ -1,22 +1,32 @@
 #include <Jam/Layer.hpp>
 #include <Jam/Entity.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace jam
 {
+  Layer::Layer()
+    : m_entities(),
+      m_sharedView(nullptr),
+      m_view()
+  {
+
+  }
+
   Layer::~Layer()
   {}
 
   void Layer::update(const float dt)
   {
     for (auto& i : m_entities) {
-      i->update(dt);
+      i.second->update(dt);
     }
   }
 
   void Layer::draw(sf::RenderTarget& target)
   {
     for (auto& i : m_entities) {
-      i->draw(target);
+      target.setView(m_sharedView ? *m_sharedView : m_view);
+      i.second->draw(target);
     }
   }
 
@@ -25,8 +35,18 @@ namespace jam
     m_view = view;
   }
 
-  sf::View Layer::getView() const
+  const sf::View& Layer::getView() const
   {
     return m_view;
+  }
+
+  void Layer::setSharedView(const sf::View* view)
+  {
+    m_sharedView = view;
+  }
+
+  const sf::View* Layer::getSharedView() const
+  {
+    return m_sharedView;
   }
 }

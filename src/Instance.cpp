@@ -7,13 +7,13 @@ namespace jam
   Instance::Instance()
     : window(sf::VideoMode(800, 600), "Jam")
   {
-
+    auto asdf = config.boolean("bool");
   }
 
   Instance::~Instance()
   {}
 
-  void Instance::loop()
+  void Instance::operator ()()
   {
     if (currentScene)
       currentScene->update(m_clock.restart().asSeconds());

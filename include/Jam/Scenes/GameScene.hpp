@@ -4,6 +4,8 @@
 
 namespace jam
 {
+  class Player;
+
   class GameScene : public Scene
   {
   public:
@@ -14,6 +16,11 @@ namespace jam
 
   private:
 
+    // Layers
+    Layer& m_backgroundLayer;
     Layer& m_gameLayer;
+
+    // Entities
+    Player* m_player;
   };
 }

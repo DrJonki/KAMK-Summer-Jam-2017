@@ -4,6 +4,7 @@
 #include <SFML/System/Clock.hpp>
 #include <memory>
 #include <Jam/ResourceManager.hpp>
+#include <Jam/ConfigManager.hpp>
 
 namespace jam
 {
@@ -11,13 +12,16 @@ namespace jam
 
   class Instance final
   {
+    Instance(const Instance&) = delete;
+    void operator =(const Instance&) = delete;
+
   public:
 
     Instance();
 
     ~Instance();
 
-    void loop();
+    void operator ()();
 
   public:
 
@@ -25,6 +29,7 @@ namespace jam
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
     ResourceManager resourceManager;
+    ConfigManager config;
 
   private:
 
