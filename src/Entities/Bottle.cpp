@@ -6,14 +6,7 @@ namespace jam
 {
     Bottle::Bottle(Instance& inst)
       : Entity(),
-        AnimatedSprite(
-          inst.resourceManager.GetTexture("Sprites/Beer.png"),
-          16,
-          16,
-          1,
-          0.25f,
-          0
-        ),
+        sf::Sprite(inst.resourceManager.GetTexture("Sprites/Beer.png")),
         m_timer(0.f)
     {
       setScale(5.f, 5.f);
@@ -24,8 +17,6 @@ namespace jam
 
     void Bottle::update(const float dt)
     {
-      AnimatedSprite::update(dt);
-
       const float rotAngle = 30.f;
       const float rotSpeed = 5.f;
 

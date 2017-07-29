@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Jam/Entity.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <Jam/AnimatedSprite.hpp>
 
 namespace jam
 {
@@ -9,7 +9,7 @@ namespace jam
   class Bottle;
   class Prompter;
 
-  class Player final : public Entity, public sf::RectangleShape
+  class Player final : public Entity, public AnimatedSprite
   {
   public:
 

@@ -114,7 +114,7 @@ namespace jam
     );
 
     m_player = &m_gameLayer.insert<Player>("Player", ins);
-    m_player->setOrigin(m_player->getSize().x * 0.5f, m_player->getSize().y);
+    m_player->setOrigin(m_player->getLocalBounds().width * 0.5f, m_player->getLocalBounds().height);
     m_player->setPosition(0.f, groundLevel);
   }
 

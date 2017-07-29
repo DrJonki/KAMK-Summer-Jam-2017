@@ -1,12 +1,12 @@
 #pragma once
 
 #include <Jam/Entity.hpp>
-#include <Jam/AnimatedSprite.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 
 namespace jam
 {
   class Instance;
-  class Bottle final : public Entity, public AnimatedSprite
+  class Bottle final : public Entity, public sf::Sprite
   {
   public:
 

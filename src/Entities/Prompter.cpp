@@ -15,25 +15,30 @@ sf::Keyboard::Key getRandomKey() {
   return keys[rand(0, 3)];
 }
 
-const char* getKeyTexture(const sf::Keyboard::Key key) {
+std::string getPromptTexture(const sf::Keyboard::Key key, const bool dude = false) {
   using Key = sf::Keyboard::Key;
 
-  return "test.png";
+  std::string prefix(dude ? "Sprites/Dude" : "Sprites/Arrow");
 
   switch (key)
   {
   case Key::Left:
-    return "";
+    prefix += "Left.png";
+    break;
   case Key::Right:
-    return "";
+    prefix += "Right.png";
+    break;
   case Key::Up:
-    return "";
+    prefix += "Up.png";
+    break;
   case Key::Down:
-    return "";
+    prefix += "Down.png";
+    break;
   default:
     assert(false);
-    return "";
   }
+
+  return prefix;
 }
 
 namespace jam
@@ -42,12 +47,13 @@ namespace jam
     : Entity(),
       sf::Sprite(),
       m_key(getRandomKey()),
-      m_indicator(ins.resourceManager.GetTexture(getKeyTexture(m_key))),
+      m_indicator(ins.resourceManager.GetTexture(getPromptTexture(m_key))),
       m_success(false),
       m_timer(0.f)
   {
-    const auto bounds = m_indicator.getGlobalBounds();
-    m_indicator.setOrigin(bounds.width * 0.5f, bounds.height * 0.5f);
+    setTexture(ins.resourceManager.GetTexture(getPromptTexture(m_key, true)));
+    setOrigin(getLocalBounds().width * 0.5f, getLocalBounds().height);
+    setScale(2.f, 2.f);
   }
 
   void Prompter::setSuccess()
@@ -67,9 +73,9 @@ namespace jam
 
   void Prompter::update(const float dt)
   {
-    const float floatRange = 10.f;
+    const float floatRange = 8.f;
     const float floatSpeed = 5.f;
-    const float floatOffset = -100.f;
+    const float floatOffset = -50.f;
 
     m_indicator.setPosition(
       0.f,
