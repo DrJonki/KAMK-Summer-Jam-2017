@@ -19,12 +19,24 @@ namespace jam
 
   void Player::update(const float dt)
   {
-    const auto gravity = m_instance.config.float_("GRAVITY");
+    using sf::Keyboard;
 
-    //m_currentSpeed.y -= 
-    //m_currentSpeed
+    const auto gravity = m_instance.config.float_("GRAVITY");
+    const auto ground = m_instance.config.float_("GROUND_LEVEL");
+    const auto accel = m_instance.config.float_("PLAYER_ACCELERATION");
+    const auto jumpForce = m_instance.config.float_("PLAYER_JUMP_FORCE");
+    const auto viewY = m_instance.config.float_("VIEW_Y");
+
+    m_currentSpeed.y += gravity * dt;
+
+    if (getPosition().y >= viewY - ground - 1.f) {
+      m_currentSpeed.y = 0.f;
+      if (Keyboard::isKeyPressed(Keyboard::Space))
+        m_currentSpeed.y = -jumpForce;
+    }
 
     move(m_currentSpeed * dt);
+    setPosition(getPosition().x, std::min(viewY - ground, getPosition().y));
   }
 
   void Player::draw(sf::RenderTarget& target)
