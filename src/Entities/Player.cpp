@@ -2,6 +2,8 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <Jam/Instance.hpp>
+#include <Jam/Entities/Bottle.hpp>
+#include <Jam/Entities/Prompter.hpp>
 
 namespace jam
 {
@@ -21,11 +23,11 @@ namespace jam
   {
     using sf::Keyboard;
 
-    const auto gravity = m_instance.config.float_("GRAVITY");
-    const auto ground = m_instance.config.float_("GROUND_LEVEL");
-    const auto accel = m_instance.config.float_("PLAYER_ACCELERATION");
-    const auto jumpForce = m_instance.config.float_("PLAYER_JUMP_FORCE");
-    const auto viewY = m_instance.config.float_("VIEW_Y");
+    static const auto gravity = m_instance.config.float_("GRAVITY");
+    static const auto ground = m_instance.config.float_("GROUND_LEVEL");
+    static const auto accel = m_instance.config.float_("PLAYER_ACCELERATION");
+    static const auto jumpForce = m_instance.config.float_("PLAYER_JUMP_FORCE");
+    static const auto viewY = m_instance.config.float_("VIEW_Y");
 
     m_currentSpeed.y += gravity * dt;
 
@@ -42,5 +44,28 @@ namespace jam
   void Player::draw(sf::RenderTarget& target)
   {
     target.draw(*this);
+  }
+
+  bool Player::collide(const Bottle& bottle)
+  {
+    if (bottle.getGlobalBounds().intersects(getGlobalBounds())) {
+
+
+      return true;
+    }
+
+    return false;
+  }
+
+  bool Player::collide(Prompter& prompter)
+  {
+    if (!prompter.success() && prompter.getGlobalBounds().intersects(getGlobalBounds())) {
+      if (sf::Keyboard::isKeyPressed(prompter.promptKey())) {
+        prompter.setSuccess();
+        return true;
+      }
+    }
+
+    return false;
   }
 }

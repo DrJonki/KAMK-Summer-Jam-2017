@@ -15,6 +15,7 @@ namespace jam
 
     // Layers
     m_backgroundLayer(addLayer(50)),
+    m_pickupLayer(addLayer(75)),
     m_gameLayer(addLayer(100)),
     m_particleLayer(addLayer(200)),
 
@@ -113,7 +114,7 @@ namespace jam
     const int currentStageX = static_cast<unsigned int>((view.getCenter().x + (conf.float_("VIEW_X") * 0.5f)) / conf.float_("VIEW_X"));
     const int currentStageY = std::abs(static_cast<int>((view.getCenter().y - (conf.float_("VIEW_Y") * 0.5f)) / conf.float_("VIEW_Y")));
     const bool inSky = currentStageY > 0;
-    std::cout << "Stage: [" << currentStageX << ", " << currentStageY << "]" << std::setw(100) << "\r";
+    std::cout << "Stage: [" << currentStageX << ", " << currentStageY << "]" << std::setw(10) << "\r";
 
     BackgroundSprite* bgs[] = {
       static_cast<BackgroundSprite*>(m_backgroundLayer.get("bg-sky-tl")),

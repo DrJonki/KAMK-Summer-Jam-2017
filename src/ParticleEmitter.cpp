@@ -38,8 +38,8 @@ namespace jam
     {
       m_particles.push_back(Particle(
         m_texture,
-        m_textureSize.x,
         m_textureSize.y,
+        m_textureSize.x,
         m_emitTime,
         m_startSpeed,
         m_endSpeed,
@@ -59,5 +59,4 @@ namespace jam
       target.draw(particle);
     }
   }
-
 }

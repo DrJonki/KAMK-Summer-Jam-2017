@@ -6,6 +6,8 @@
 namespace jam
 {
   class Instance;
+  class Bottle;
+  class Prompter;
 
   class Player final : public Entity, public sf::RectangleShape
   {
@@ -16,6 +18,10 @@ namespace jam
     void update(const float dt) override;
 
     void draw(sf::RenderTarget& target) override;
+
+    bool collide(const Bottle& bottle);
+
+    bool collide(Prompter& prompter);
 
   private:
 
