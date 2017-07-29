@@ -14,6 +14,7 @@ namespace jam
       sf::Texture& texture,
       int width,
       int height,
+      sf::Vector2f startPosition,
       float lifetime,
       float startSpeed,
       float friction,
@@ -30,6 +31,8 @@ namespace jam
 
     int m_width;
     int m_height;
+
+    sf::Vector2f m_startPosition;
 
     float m_startSpeed;
     float m_friction;

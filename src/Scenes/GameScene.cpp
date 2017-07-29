@@ -7,6 +7,7 @@
 #include <Jam/Entities/BackgroundSprite.hpp>
 #include <iostream>
 #include <iomanip>
+#include <SFML/Window/Keyboard.hpp>
 
 namespace jam
 {
@@ -80,9 +81,9 @@ namespace jam
       "test.png", // texturePath
       sf::Vector2f(50, 50), // textureSize
       100, // maxParticles
-      20.f, // emitTime
-      10.f, // lifeTime
-      0.15f, // startspeed
+      1.f, // emitTime
+      1.f, // lifeTime
+      0.25f, // startspeed
       100.f, // friction
       0.f, // startAngle
       0.25f // startTorgue
@@ -95,6 +96,8 @@ namespace jam
 
   void GameScene::update(const float dt)
   {
+    using sf::Keyboard;
+
     Scene::update(dt);
     const auto& conf = getInstance().config;
 
@@ -108,6 +111,10 @@ namespace jam
       )
     );
     setView(view);
+
+    // Particle emit test
+    if (Keyboard::isKeyPressed(Keyboard::Space))
+      m_particleEmitter->emit(m_player->getPosition());
 
     // Update background positions
     const auto all = m_backgroundLayer.getAll();

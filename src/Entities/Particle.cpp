@@ -5,6 +5,7 @@ namespace jam {
     sf::Texture& texture,
     int width,
     int height,
+    sf::Vector2f startPosition,
     float lifetime,
     float startSpeed,
     float friction,
@@ -14,6 +15,7 @@ namespace jam {
     float minAlpha
   ) : m_width(width),
     m_height(height),
+    m_startPosition(startPosition),
     m_startSpeed(startSpeed),
     m_friction(friction),
     m_curSpeed(startSpeed),
@@ -27,6 +29,7 @@ namespace jam {
     m_direction = sf::Vector2f(m_random(-1.f, 1.f), m_random(-1.f, 1.f));
     setTexture(texture);
     setRotation(startAngle);
+    setPosition(m_startPosition);
     setOrigin(sf::Vector2f(m_width / 2, m_height / 2));
   }
 
