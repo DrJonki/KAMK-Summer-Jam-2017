@@ -5,16 +5,16 @@
 
 namespace jam
 {
-    class Instance;
-    class Bottle final : public Entity, public AnimatedSprite
-    {
-    public:
+  class Instance;
+  class Bottle final : public Entity, public AnimatedSprite
+  {
+  public:
 
-        Bottle(Instance& inst);
+    Bottle(Instance& inst);
 
-        void update(const float dt) override;
+    void update(const float dt) override;
 
-        void draw(sf::RenderTarget& target) override;
+    void draw(sf::RenderTarget& target) override;
 
-    };
+  };
 }
