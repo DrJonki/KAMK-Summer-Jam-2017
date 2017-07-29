@@ -27,8 +27,6 @@ namespace jam
 
     void update(const float dt) override;
 
-    void setState(const State state);
-
     State getState() const;
 
   private:

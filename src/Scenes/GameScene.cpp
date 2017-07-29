@@ -62,7 +62,7 @@ namespace jam
 
     m_buildUp.openFromFile("assets/Audio/Buildup.wav");
     m_buildUp.setRelativeToListener(true);
-    m_buildUp.setVolume(75.f);
+    m_buildUp.setPlayingOffset(sf::seconds(0.5f));
 
     // Background sprites
     // Sky
@@ -110,7 +110,7 @@ namespace jam
     const auto stageAmount = ins.config.integer("NUM_X_STAGES");
     
     // Prompters
-    for (std::size_t i = 0; i < stageAmount - 1u; ++i) {
+    for (int i = 1u; i < stageAmount; ++i) {
       auto& prompter = m_pickupLayer.insert<Prompter>("Prompter", ins);
       prompter.setPosition(i * viewSize.x, groundLevel);
     }
@@ -206,14 +206,16 @@ namespace jam
     }
 
     if (getState() != State::Jumped && currentStageX >= transitionAfter && (view.getCenter().x + (conf.float_("VIEW_X") * 0.5f)) / conf.float_("VIEW_X") > (transitionAfter + 0.4f)) {
-      setState(State::BeforeJump);
-      m_runMusic.setVolume(std::max(0.f, m_runMusic.getVolume() - 5.f * dt));
+      m_currentState = State::BeforeJump;
+      m_runMusic.stop();
       if (m_jumpMusic.getStatus() != sf::Music::Status::Playing) {
         m_jumpMusic.play();
         m_buildUp.play();
       }
-      /*if (m_buildUp.getStatus() == sf::Music::Status::Stopped)
-        setState(State::Jumped);*/
+      if (m_buildUp.getStatus() == sf::Music::Status::Stopped) {
+        m_currentState = State::Jumped;
+        m_player->jump();
+      }
     }
 
     // Collisions
@@ -227,11 +229,6 @@ namespace jam
 
     // Stats
     m_scoreText->setString("Score: " + std::to_string(m_score));
-  }
-
-  void GameScene::setState(const State state)
-  {
-    m_currentState = state;
   }
 
   GameScene::State GameScene::getState() const
