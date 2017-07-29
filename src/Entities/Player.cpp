@@ -30,18 +30,34 @@ namespace jam
         ins, // instance
         "Particles/stepcloud.png", // texturePath
         sf::Vector2f(50, 50), // textureSize
-        10, // maxParticles
+        3, // maxParticles
         0.02f, // emitTime (if (x < 0.f) it is set to be forever
-        0.50f, // lifeTime
-        0.015f, // startspeed
-        50.f, // friction
+        1.f, // lifeTime
+        0.05f, // startspeed
+        0.025f, // friction
         0.f, // startAngle
         0.f, // startTorgue
         100.f, // maxAlpha
         0.f // minAlpha
       ),
+      m_bottleParticle(
+        ins,
+        "Particles/beersplash.png",
+        sf::Vector2f(25, 25),
+        5,
+        0.1f,
+        0.50f,
+        0.015f,
+        0.1f,
+        0.f,
+        1.f,
+        100.f,
+        0.f
+      ),
       m_bottleSound(ins.resourceManager.GetSoundBuffer("Yeah.wav")),
       m_finalJumpSound(ins.resourceManager.GetSoundBuffer("FinalJump.wav")),
+      m_arrow(ins.resourceManager.GetTexture("arrow.png")),
+      m_arrowBar(ins.resourceManager.GetTexture("arrowBar.png")),
       m_stopped(false),
       m_jumpPressed(false),
       m_rotationSpeed(0.f),
@@ -61,8 +77,10 @@ namespace jam
     m_splashSound.setRelativeToListener(true);
     m_splashSound.setPitch(1.2f);
 
-    // Run particle
-    m_runParticle.setPosition(getPosition());
+    m_arrow.setOrigin(0, m_arrow.getLocalBounds().height / 2);
+    m_arrowBar.setOrigin(0, m_arrowBar.getLocalBounds().height / 2);
+    m_arrow.setPosition(0, -1000);
+    m_arrowBar.setPosition(0, -1000);
   }
 
   void Player::update(const float dt)
@@ -71,6 +89,7 @@ namespace jam
 
     AnimatedSprite::update(dt);
     m_runParticle.update(dt);
+    m_bottleParticle.update(dt);
 
     static const auto gravity = m_instance.config.float_("GRAVITY");
     static const auto ground = m_instance.config.float_("GROUND_LEVEL");
@@ -104,13 +123,48 @@ namespace jam
               m_jumpPressed = true;
           }
         }
+
+        m_arrow_speed = 1250.f - m_currentSpeed.x;
         break;
       }
 
       case GameScene::State::BeforeJump:
       {
         m_runSound.setVolume(0.f);
+        m_arrow.setPosition(
+          getPosition().x + getLocalBounds().width * 2,
+          getPosition().y - getLocalBounds().height * 3
+        );
+        m_arrowBar.setPosition(
+          getPosition().x + getLocalBounds().width * 2.5f,
+          getPosition().y - getLocalBounds().height * 6.f
+        );
         m_currentSpeed = sf::Vector2f();
+
+        if (Keyboard::isKeyPressed(Keyboard::Space))
+        {
+          m_arrow_locked = true;
+        }
+        if (!m_arrow_locked)
+        {
+          // rotate
+          m_arrow_angle += m_arrow_speed * dt * m_arrow_dir;
+
+          m_arrow.setRotation(m_arrow_angle);
+          // change dir
+          if (m_arrow_angle > m_arrow_angle_max)
+          {
+            m_arrow.setRotation(m_arrow_angle_max - 0.15f);
+            m_arrow_angle = m_arrow_angle_max - 0.15f;
+            m_arrow_dir = -1;
+          }
+          else if (m_arrow_angle < m_arrow_angle_min)
+          {
+            m_arrow.setRotation(m_arrow_angle_min + 0.15f);
+            m_arrow_angle = m_arrow_angle_min + 0.15f;
+            m_arrow_dir = 1;
+          }
+        }
 
         break;
       }
@@ -143,7 +197,14 @@ namespace jam
       rotate(m_rotationSpeed * dt);
       move(m_currentSpeed * dt);
       setPosition(getPosition().x, std::min(viewY - ground, getPosition().y));
+      // set all particles to follow player
       m_runParticle.setPosition(getPosition());
+      m_bottleParticle.setPosition(
+        sf::Vector2f(
+          getPosition().x + getLocalBounds().width * 2,
+          getPosition().y - getLocalBounds().height * 2
+        )
+      );
     }
   }
 
@@ -151,7 +212,10 @@ namespace jam
   {
     if (!isStopped()) {
       target.draw(*this);
+    target.draw(m_arrowBar);
+    target.draw(m_arrow);
       m_runParticle.draw(target);
+    m_bottleParticle.draw(target);
     }
   }
 
@@ -165,6 +229,7 @@ namespace jam
   {
     if (modifyRect(bottle.getGlobalBounds()).intersects(modifyRect(getGlobalBounds()))) {
       bottle.setActive(false);
+      m_bottleParticle.emit();
       float pitch = 1 + (m_random(-0.3f, 0.3f));
       m_bottleSound.setPitch(pitch);
       m_bottleSound.play();

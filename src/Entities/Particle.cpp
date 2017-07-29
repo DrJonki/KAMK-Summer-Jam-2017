@@ -49,7 +49,8 @@ namespace jam {
 
   void Particle::moveParticle(const float dt)
   {
-    auto moveVelocity = m_direction * (m_curSpeed - (m_friction * dt));
+    float speed = m_curSpeed - (m_friction);
+    auto moveVelocity = m_direction * speed;
     move(moveVelocity);
     rotate(m_torgue);
     float what = 255.f - ((m_curTime / m_lifeTime) * 255.f);

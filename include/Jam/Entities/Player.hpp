@@ -37,17 +37,31 @@ namespace jam
     Instance& m_instance;
     GameScene& m_scene;
     sf::Vector2f m_currentSpeed;
+
+    ParticleEmitter m_bottleParticle;
+    ParticleEmitter m_runParticle;
+
     float m_rotationSpeed;
     bool m_stopped;
     bool m_justJumped;
 
     // Soundsource
-    ParticleEmitter m_runParticle;
     bool m_jumpPressed;
     sf::Sound m_bottleSound;
     sf::Sound m_runSound;
     sf::Sound m_finalJumpSound;
     sf::Sound m_ouchSound;
     sf::Sound m_splashSound;
+
+    // arrow
+    sf::Sprite m_arrowBar;
+    sf::Sprite m_arrow;
+    float m_arrow_angle = 0;
+    int m_arrow_dir = 1;
+    float m_arrow_angle_max = 1;
+    float m_arrow_angle_min = -70;
+    float m_arrow_speed = 800.f;
+    float m_arrow_locked = false;
+
   };
 }
