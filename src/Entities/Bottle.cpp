@@ -1,11 +1,19 @@
 #include <Jam/Entities/Bottle.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <Jam/Instance.hpp>
 
 namespace jam
 {
-    Bottle::Bottle()
-        : Entity(),
-        sf::Sprite()
+    Bottle::Bottle(Instance& inst)
+      : Entity(),
+      AnimatedSprite(
+        inst.resourceManager.GetTexture("Sprites/Beer.png"),
+        16,
+        16,
+        1,
+        0.25f,
+        0
+      )
     {
         // we need something here?
     }
@@ -13,14 +21,11 @@ namespace jam
 
     void Bottle::update(const float dt)
     {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-            move(-10.f * dt, 0.f);
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-            move(10.f * dt, 0.f);
+      AnimatedSprite::update(dt);
     }
 
     void Bottle::draw(sf::RenderTarget& target)
     {
-        target.draw(*this);
+      target.draw(*this);
     }
 }

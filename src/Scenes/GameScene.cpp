@@ -2,6 +2,7 @@
 #include <Jam/Layer.hpp>
 #include <Jam/Instance.hpp>
 #include <Jam/Entities/Player.hpp>
+#include <Jam/Entities/Bottle.hpp>
 #include <Jam/Entities/BackgroundSprite.hpp>
 
 namespace jam
