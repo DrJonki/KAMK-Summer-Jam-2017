@@ -31,10 +31,10 @@ namespace jam
         "Particles/stepcloud.png", // texturePath
         sf::Vector2f(50, 50), // textureSize
         3, // maxParticles
-        0.02f, // emitTime (if (x < 0.f) it is set to be forever
+        0.25f, // emitTime (if (x < 0.f) it is set to be forever
         1.f, // lifeTime
-        0.05f, // startspeed
-        0.025f, // friction
+        0.55f, // startspeed
+        0.25f, // friction
         0.f, // startAngle
         0.f, // startTorgue
         100.f, // maxAlpha
@@ -45,12 +45,12 @@ namespace jam
         "Particles/beersplash.png",
         sf::Vector2f(25, 25),
         5,
-        0.1f,
+        0.25f,
         0.50f,
-        0.015f,
-        0.1f,
+        1.55f,
+        0.5f,
         0.f,
-        1.f,
+        1.75f,
         100.f,
         0.f
       ),

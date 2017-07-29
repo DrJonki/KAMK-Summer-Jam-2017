@@ -56,10 +56,10 @@ namespace jam
         "Particles/highfiveeffect.png", // texturePath
         sf::Vector2f(25, 25), // textureSize
         20, // maxParticles
-        0.1f, // emitTime (if (x < 0.f) it is set to be forever
+        0.35f, // emitTime (if (x < 0.f) it is set to be forever
         1.50f, // lifeTime
-        0.25f, // startspeed
-        0.1f, // friction
+        2.75f, // startspeed
+        0.5f, // friction
         0.f, // startAngle
         10.f, // startTorgue
         200.f, // maxAlpha
