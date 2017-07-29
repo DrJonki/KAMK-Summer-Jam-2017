@@ -24,7 +24,7 @@ namespace jam
 
     void draw(sf::RenderTarget& target) override;
 
-    void jump();
+    bool jump();
 
     bool isStopped() const;
 
@@ -44,6 +44,7 @@ namespace jam
     float m_rotationSpeed;
     bool m_stopped;
     bool m_justJumped;
+    bool m_jumpFailed;
 
     // Soundsource
     bool m_jumpPressed;
@@ -52,6 +53,7 @@ namespace jam
     sf::Sound m_finalJumpSound;
     sf::Sound m_ouchSound;
     sf::Sound m_splashSound;
+    sf::Sound m_failSound;
 
     // arrow
     sf::Sprite m_arrowBar;
@@ -61,7 +63,7 @@ namespace jam
     float m_arrow_angle_max = 1;
     float m_arrow_angle_min = -70;
     float m_arrow_speed = 800.f;
-    float m_arrow_locked = false;
+    bool m_arrow_locked = false;
 
   };
 }

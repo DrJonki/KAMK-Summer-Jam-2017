@@ -62,7 +62,9 @@ namespace jam
       m_jumpPressed(false),
       m_rotationSpeed(0.f),
       m_ouchSound(ins.resourceManager.GetSoundBuffer("auts2_louder.wav")),
-      m_splashSound(ins.resourceManager.GetSoundBuffer("Splash.wav"))
+      m_splashSound(ins.resourceManager.GetSoundBuffer("Splash.wav")),
+      m_failSound(ins.resourceManager.GetSoundBuffer("Fart.wav")),
+      m_jumpFailed(false)
   {
     setScale(5.f, 5.f);
 
@@ -76,6 +78,8 @@ namespace jam
     m_ouchSound.setRelativeToListener(true);
     m_splashSound.setRelativeToListener(true);
     m_splashSound.setPitch(1.2f);
+    m_failSound.setRelativeToListener(true);
+    m_failSound.setPitch(0.8f);
 
     m_arrow.setOrigin(0, m_arrow.getLocalBounds().height / 2);
     m_arrowBar.setOrigin(0, m_arrowBar.getLocalBounds().height / 2);
@@ -255,16 +259,32 @@ namespace jam
     return false;
   }
 
-  void Player::jump()
+  bool Player::jump()
   {
     static const float jumpX = m_instance.config.float_("PLAYER_FINAL_JUMP_X");
     static const float jumpY = m_instance.config.float_("PLAYER_FINAL_JUMP_Y");
+
+    const float range = std::abs(m_arrow_angle_min - m_arrow_angle_max);
+    const float ratio = 1.f - std::abs(std::abs(m_arrow_angle) - range * 0.5f) / (range * 0.5f);
+    // const float ratio = (range * 0.5f) / (std::abs(m_arrow_angle - (range * 0.5f)));
+    const float arrowFail = !m_arrow_locked || ratio < 0.1f;
 
     m_currentSpeed.x = jumpX;
     m_currentSpeed.y = -jumpY;
     m_justJumped = true;
     m_rotationSpeed = 180.f;
-    m_finalJumpSound.play();
+
+    if (arrowFail) {
+      m_failSound.play();
+      m_currentSpeed *= 0.075f;
+    }
+    else
+    {
+      m_currentSpeed *= ratio;
+      m_finalJumpSound.play();
+    }
+
+    return !arrowFail;
   }
 
   bool Player::isStopped() const

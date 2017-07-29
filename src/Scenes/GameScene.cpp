@@ -189,7 +189,7 @@ namespace jam
     const auto result = glm::mix(
       glm::vec2(current),
       target,
-      dt * 35.f
+      dt * 30.f
     );
     view.setCenter(result.x, result.y);
     setView(view);
@@ -257,7 +257,9 @@ namespace jam
       }
       if (m_buildUp.getStatus() == sf::Music::Status::Stopped) {
         m_currentState = State::Jumped;
-        m_player->jump();
+        if (!m_player->jump()) {
+          m_jumpMusic.stop();
+        }
       }
     }
 
