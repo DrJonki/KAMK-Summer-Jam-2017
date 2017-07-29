@@ -16,6 +16,7 @@ namespace jam
     : Scene(ins),
 
     m_currentState(State::Running),
+    m_started(false),
 
     // Sounds
     m_runMusic(),
@@ -33,7 +34,8 @@ namespace jam
 
     // Stats
     m_scoreText(nullptr),
-    m_score(0)
+    m_score(0),
+    m_scoreExtra(0)
   {
     const sf::Vector2f viewSize(sf::Vector2u(
       ins.config.integer("VIEW_X"),
@@ -56,7 +58,6 @@ namespace jam
     m_runMusic.play();
 
     m_jumpMusic.openFromFile("assets/Audio/FlyMusic.wav");
-    m_jumpMusic.setLoop(true);
     m_jumpMusic.setRelativeToListener(true);
     m_jumpMusic.setVolume(75.f);
 
@@ -130,10 +131,42 @@ namespace jam
     m_player->setOrigin(m_player->getLocalBounds().width * 0.5f, m_player->getLocalBounds().height);
     m_player->setPosition(0.f, groundLevel);
 
+    auto view = getView();
+    const auto current = glm::vec2(view.getCenter().x, view.getCenter().y);
+    const auto target = glm::vec2(
+      m_player->getPosition().x,
+      std::min(
+        ins.config.float_("VIEW_Y") * 0.5f,
+        m_player->getPosition().y
+      )
+    );
+    view.setCenter(target.x, target.y);
+    setView(view);
+
     // Stats
+    auto& font = ins.resourceManager.GetFont("gamefont.ttf");
     m_scoreText = &m_uiLayer.insert<Text>("ScoreText");
-    m_scoreText->setFont(ins.resourceManager.GetFont("gamefont.ttf"));
+    m_scoreText->setFont(font);
     m_scoreText->setFillColor(sf::Color::Black);
+    m_scoreText->setOutlineColor(sf::Color::White);
+    m_scoreText->setOutlineThickness(2);
+    m_scoreText->move(5, 0);
+
+    m_startText = &m_uiLayer.insert<Text>("StartText");
+    m_startText->setFont(font);
+    m_startText->setFillColor(sf::Color::Black);
+    m_startText->setOutlineColor(sf::Color::White);
+    m_startText->setOutlineThickness(2);
+    m_startText->setString("Press SPACE to begin");
+    m_startText->setCharacterSize(64);
+    m_startText->setOrigin(m_startText->getLocalBounds().width * 0.5f, m_startText->getLocalBounds().height * 0.5f);
+    m_startText->setPosition(viewSize * 0.5f);
+
+    m_endText = &m_uiLayer.insert<Text>("EndText");
+    m_endText->setFont(font);
+    m_endText->setFillColor(sf::Color::Black);
+    m_endText->setOutlineColor(sf::Color::White);
+    m_endText->setOutlineThickness(2);
   }
 
   void GameScene::update(const float dt)
@@ -156,7 +189,7 @@ namespace jam
     const auto result = glm::mix(
       glm::vec2(current),
       target,
-      dt * 45.f
+      dt * 35.f
     );
     view.setCenter(result.x, result.y);
     setView(view);
@@ -180,6 +213,9 @@ namespace jam
     };
 
     const auto transitionAfter = conf.integer("NUM_X_STAGES");
+
+    if (getState() == State::Jumped)
+      m_scoreExtra = currentStageX - transitionAfter;
 
     if (!inSky) {
       char* left = "";
@@ -235,11 +271,41 @@ namespace jam
     }
 
     // Stats
-    m_scoreText->setString("Score: " + std::to_string(m_score));
+    m_scoreText->setString("Score: " + std::to_string(m_score + m_scoreExtra));
+
+    if (Keyboard::isKeyPressed(Keyboard::Space)) {
+      m_startText->setActive(false);
+      m_started = true;
+    }
+
+    m_endText->setActive(false);
+    if (m_player->isStopped()) {
+      m_scoreText->setActive(false);
+
+      const sf::Vector2f viewSize(sf::Vector2u(
+        conf.integer("VIEW_X"),
+        conf.integer("VIEW_Y")
+      ));
+
+      m_endText->setActive(true);
+      m_endText->setString("Final score: " + std::to_string(m_score + m_scoreExtra) + "\n\nPress ENTER to jump again");
+      m_endText->setOrigin(m_endText->getLocalBounds().width * 0.5f, m_endText->getLocalBounds().height * 0.5f);
+      m_endText->setPosition(viewSize * 0.5f);
+
+      if (Keyboard::isKeyPressed(Keyboard::Return)) {
+        getInstance().currentScene = std::make_unique<GameScene>(getInstance());
+      }
+    }
   }
 
   GameScene::State GameScene::getState() const
   {
     return m_currentState;
   }
+
+  bool GameScene::isStarted() const
+  {
+    return m_started;
+  }
+
 }

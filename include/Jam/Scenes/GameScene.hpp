@@ -29,9 +29,12 @@ namespace jam
 
     State getState() const;
 
+    bool isStarted() const;
+
   private:
 
     State m_currentState;
+    bool m_started;
 
     // Sounds
     sf::Music m_runMusic;
@@ -50,6 +53,9 @@ namespace jam
 
     // Stats
     Text* m_scoreText;
+    Text* m_startText;
+    Text* m_endText;
     int m_score;
+    int m_scoreExtra;
   };
 }

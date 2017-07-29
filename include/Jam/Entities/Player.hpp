@@ -26,6 +26,8 @@ namespace jam
 
     void jump();
 
+    bool isStopped() const;
+
     bool collide(Bottle& bottle);
 
     bool collide(Prompter& prompter);
@@ -46,5 +48,6 @@ namespace jam
     sf::Sound m_runSound;
     sf::Sound m_finalJumpSound;
     sf::Sound m_ouchSound;
+    sf::Sound m_splashSound;
   };
 }

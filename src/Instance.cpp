@@ -2,16 +2,33 @@
 #include <Jam/Scene.hpp>
 #include <SFML/Window/Event.hpp>
 
+sf::VideoMode getVideomode(const jam::ConfigManager& config) {
+  #ifdef _DEBUG
+    return sf::VideoMode(config.integer("VIEW_X"), config.integer("VIEW_Y"));
+  #else
+    return sf::VideoMode::getDesktopMode();
+  #endif
+}
+
+sf::Uint32 getStyle() {
+  #ifdef _DEBUG
+    return sf::Style::Default;
+  #else
+    return sf::Style::None;
+  #endif
+}
+
 namespace jam
 {
   Instance::Instance()
     : config(),
-      window(sf::VideoMode(config.integer("VIEW_X"), config.integer("VIEW_Y")), "Jam"),
+      window(getVideomode(config), "Jam", getStyle()),
       currentScene(),
       resourceManager(),
       m_clock()
   {
-    
+    window.setVerticalSyncEnabled(true);
+    window.setMouseCursorVisible(false);
   }
 
   Instance::~Instance()
@@ -48,6 +65,13 @@ namespace jam
           static_cast<unsigned int>(window.getSize().y * ratio),
           window.getSize().y
         ));
+        break;
+      }
+      case sf::Event::KeyReleased:
+      {
+        if (event.key.code == sf::Keyboard::Escape)
+          window.close();
+
         break;
       }
       }

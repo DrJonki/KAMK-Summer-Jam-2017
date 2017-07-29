@@ -45,7 +45,8 @@ namespace jam
       m_stopped(false),
       m_jumpPressed(false),
       m_rotationSpeed(0.f),
-      m_ouchSound(ins.resourceManager.GetSoundBuffer("auts2_louder.wav"))
+      m_ouchSound(ins.resourceManager.GetSoundBuffer("auts2_louder.wav")),
+      m_splashSound(ins.resourceManager.GetSoundBuffer("Splash.wav"))
   {
     setScale(5.f, 5.f);
 
@@ -57,6 +58,8 @@ namespace jam
     m_finalJumpSound.setRelativeToListener(true);
     m_bottleSound.setRelativeToListener(true);
     m_ouchSound.setRelativeToListener(true);
+    m_splashSound.setRelativeToListener(true);
+    m_splashSound.setPitch(1.2f);
 
     // Run particle
     m_runParticle.setPosition(getPosition());
@@ -74,7 +77,10 @@ namespace jam
     static const auto jumpForce = m_instance.config.float_("PLAYER_JUMP_FORCE");
     static const auto viewY = m_instance.config.float_("VIEW_Y");
 
-    if (!m_stopped) {
+    if (!m_scene.isStarted())
+      m_runSound.setVolume(0.f);
+
+    if (!m_stopped && m_scene.isStarted()) {
       switch (m_scene.getState()) {
       case GameScene::State::Running:
       {
@@ -123,18 +129,17 @@ namespace jam
             m_ouchSound.play();
           }
 
-          if (m_currentSpeed.y < 0.01f && m_currentSpeed.x < 0.01f)
+          if (m_currentSpeed.y < 50.f && m_currentSpeed.x < 50.f) {
             m_stopped = true;
+            m_splashSound.play();
+          }
         }
         m_justJumped = false;
       }
       }
     }
 
-    if (m_stopped) {
-      setRotation(90.f);
-    }
-    else {
+    if (m_scene.isStarted()) {
       rotate(m_rotationSpeed * dt);
       move(m_currentSpeed * dt);
       setPosition(getPosition().x, std::min(viewY - ground, getPosition().y));
@@ -144,13 +149,21 @@ namespace jam
 
   void Player::draw(sf::RenderTarget& target)
   {
-    target.draw(*this);
-    m_runParticle.draw(target);
+    if (!isStopped()) {
+      target.draw(*this);
+      m_runParticle.draw(target);
+    }
+  }
+
+  sf::FloatRect& modifyRect(sf::FloatRect& rect) {
+    rect.width *= 0.5f;
+    rect.height *= 0.5f;
+    return rect;
   }
 
   bool Player::collide(Bottle& bottle)
   {
-    if (bottle.getGlobalBounds().intersects(getGlobalBounds())) {
+    if (modifyRect(bottle.getGlobalBounds()).intersects(modifyRect(getGlobalBounds()))) {
       bottle.setActive(false);
       float pitch = 1 + (m_random(-0.3f, 0.3f));
       m_bottleSound.setPitch(pitch);
@@ -163,7 +176,7 @@ namespace jam
 
   bool Player::collide(Prompter& prompter)
   {
-    if (!prompter.success() && prompter.getGlobalBounds().intersects(getGlobalBounds())) {
+    if (!prompter.success() && modifyRect(prompter.getGlobalBounds()).intersects(modifyRect(getGlobalBounds()))) {
       if (sf::Keyboard::isKeyPressed(prompter.promptKey())) {
         static const auto accel = m_instance.config.float_("PLAYER_ACCELERATION");
 
@@ -188,4 +201,10 @@ namespace jam
     m_rotationSpeed = 180.f;
     m_finalJumpSound.play();
   }
+
+  bool Player::isStopped() const
+  {
+    return m_stopped;
+  }
+
 }
