@@ -21,7 +21,7 @@ namespace jam
       move(500.f * dt, 0.f);*/
 
 
-    move(m_currentSpeed * dt, 0.f);
+    // move(m_currentSpeed * dt, 0.f);
 
   }
 
