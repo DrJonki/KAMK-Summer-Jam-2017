@@ -76,11 +76,16 @@ namespace jam
     // Particle
     m_particleEmitter = &m_particleLayer.insert<ParticleEmitter>(
       "ParticleEmitter01",
-      ins,
-      "test.png",
-      sf::Vector2f(50, 50),
-      10000,
-      0.25f
+      ins, // instance
+      "test.png", // texturePath
+      sf::Vector2f(50, 50), // textureSize
+      100, // maxParticles
+      20.f, // emitTime
+      10.f, // lifeTime
+      0.15f, // startspeed
+      100.f, // friction
+      0.f, // startAngle
+      0.25f // startTorgue
     );
 
     m_player = &m_gameLayer.insert<Player>("Player", ins);
