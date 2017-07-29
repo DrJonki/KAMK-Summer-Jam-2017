@@ -20,6 +20,7 @@ namespace jam
 
     // Layers
     Layer& m_backgroundLayer;
+    Layer& m_pickupLayer;
     Layer& m_gameLayer;
     Layer& m_particleLayer;
 

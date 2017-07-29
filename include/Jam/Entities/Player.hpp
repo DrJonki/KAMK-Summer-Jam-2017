@@ -1,13 +1,15 @@
 #pragma once
 
 #include <Jam/Entity.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <Jam/AnimatedSprite.hpp>
 
 namespace jam
 {
   class Instance;
+  class Bottle;
+  class Prompter;
 
-  class Player final : public Entity, public sf::RectangleShape
+  class Player final : public Entity, public AnimatedSprite
   {
   public:
 
@@ -16,6 +18,10 @@ namespace jam
     void update(const float dt) override;
 
     void draw(sf::RenderTarget& target) override;
+
+    bool collide(Bottle& bottle);
+
+    bool collide(Prompter& prompter);
 
   private:
 

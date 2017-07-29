@@ -84,5 +84,4 @@ namespace jam
       target.draw(particle);
     }
   }
-
 }
