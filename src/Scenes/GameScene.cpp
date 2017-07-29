@@ -110,7 +110,7 @@ namespace jam
     const auto stageAmount = ins.config.integer("NUM_X_STAGES");
     
     // Prompters
-    for (std::size_t i = 1; i < stageAmount; ++i) {
+    for (int i = 1u; i < stageAmount; ++i) {
       auto& prompter = m_pickupLayer.insert<Prompter>("Prompter", ins);
       prompter.setPosition(i * viewSize.x, groundLevel);
     }

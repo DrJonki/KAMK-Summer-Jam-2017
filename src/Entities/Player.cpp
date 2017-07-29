@@ -19,6 +19,7 @@ namespace jam
         0.05f
       ),
       m_instance(ins),
+      m_random(),
       m_scene(scene),
       m_currentSpeed(
         ins.config.float_("PLAYER_START_SPEED"),
@@ -39,6 +40,8 @@ namespace jam
         100.f, // maxAlpha
         0.f // minAlpha
       ),
+      m_bottleSound(ins.resourceManager.GetSoundBuffer("Yeah.wav")),
+      m_finalJumpSound(ins.resourceManager.GetSoundBuffer("FinalJump.wav")),
       m_stopped(false),
       m_jumpPressed(false),
       m_rotationSpeed(0.f)
@@ -47,8 +50,11 @@ namespace jam
 
     m_runSound.setRelativeToListener(true);
     m_runSound.setLoop(true);
-    m_jumpPressed = false;
     m_runSound.play();
+
+    m_bottleSound.setRelativeToListener(true);
+    m_finalJumpSound.setRelativeToListener(true);
+    m_bottleSound.setRelativeToListener(true);
 
     // Run particle
     m_runParticle.setPosition(getPosition());
@@ -124,7 +130,8 @@ namespace jam
       setRotation(90.f);
     }
     else {
-      rotate(m_rotationSpeed * dt);      move(m_currentSpeed * dt);
+      rotate(m_rotationSpeed * dt);
+      move(m_currentSpeed * dt);
       setPosition(getPosition().x, std::min(viewY - ground, getPosition().y));
       m_runParticle.setPosition(getPosition());
     }
@@ -140,7 +147,9 @@ namespace jam
   {
     if (bottle.getGlobalBounds().intersects(getGlobalBounds())) {
       bottle.setActive(false);
-
+      float pitch = 1 + (m_random(-0.3f, 0.3f));
+      m_bottleSound.setPitch(pitch);
+      m_bottleSound.play();
       return true;
     }
 
@@ -172,5 +181,6 @@ namespace jam
     m_currentSpeed.y = -jumpY;
     m_justJumped = true;
     m_rotationSpeed = 180.f;
+    m_finalJumpSound.play();
   }
 }

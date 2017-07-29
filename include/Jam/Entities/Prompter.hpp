@@ -3,6 +3,8 @@
 #include <Jam/Entity.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Audio.hpp>
+#include <Jam/Randomizer.hpp>
 
 namespace jam
 {
@@ -28,6 +30,8 @@ namespace jam
 
     sf::Keyboard::Key m_key;
     sf::Sprite m_indicator;
+    sf::Sound m_clapSound;
+    Randomizer m_random;
     bool m_success;
     float m_timer;
   };

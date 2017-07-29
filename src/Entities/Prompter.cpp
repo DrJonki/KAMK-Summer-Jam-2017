@@ -1,6 +1,5 @@
 #include <Jam/Entities/Prompter.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
-#include <Jam/Randomizer.hpp>
 #include <Jam/Instance.hpp>
 
 sf::Keyboard::Key getRandomKey() {
@@ -49,7 +48,9 @@ namespace jam
       m_key(getRandomKey()),
       m_indicator(ins.resourceManager.GetTexture(getPromptTexture(m_key))),
       m_success(false),
-      m_timer(0.f)
+      m_timer(0.f),
+      m_clapSound(ins.resourceManager.GetSoundBuffer("HighFive.wav")),
+      m_random()
   {
     setTexture(ins.resourceManager.GetTexture(getPromptTexture(m_key, true)));
     setOrigin(getLocalBounds().width * 0.5f, getLocalBounds().height);
@@ -60,6 +61,9 @@ namespace jam
 
   void Prompter::setSuccess()
   {
+    float pitch = 1 + (m_random(-0.3f, 0.3f));
+    m_clapSound.setPitch(pitch);
+    m_clapSound.play();
     m_success = true;
   }
 

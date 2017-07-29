@@ -4,6 +4,8 @@
 #include <Jam/AnimatedSprite.hpp>
 #include <SFML/Audio/Sound.hpp>
 #include <Jam/ParticleEmitter.hpp>
+#include <Jam/Randomizer.hpp>
+#include <SFML/Audio.hpp>
 
 namespace jam
 {
@@ -29,7 +31,7 @@ namespace jam
     bool collide(Prompter& prompter);
 
   private:
-
+    Randomizer m_random;
     Instance& m_instance;
     GameScene& m_scene;
     sf::Vector2f m_currentSpeed;
@@ -40,7 +42,8 @@ namespace jam
     // Soundsource
     ParticleEmitter m_runParticle;
     bool m_jumpPressed;
+    sf::Sound m_bottleSound;
     sf::Sound m_runSound;
-    sf::Sound m_chargeSound;
+    sf::Sound m_finalJumpSound;
   };
 }
