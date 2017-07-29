@@ -3,6 +3,8 @@
 #include <Jam/Entity.hpp>
 #include <Jam/AnimatedSprite.hpp>
 #include <Jam/ParticleEmitter.hpp>
+#include <Jam/Randomizer.hpp>
+#include <SFML/Audio.hpp>
 
 namespace jam
 {
@@ -25,10 +27,11 @@ namespace jam
     bool collide(Prompter& prompter);
 
   private:
-
+    Randomizer m_random;
     Instance& m_instance;
     sf::Vector2f m_currentSpeed;
     ParticleEmitter m_runParticle;
     bool m_jumpPressed;
+    sf::Sound m_bottleSound;
   };
 }

@@ -18,6 +18,7 @@ namespace jam
         0.25f
       ),
       m_instance(ins),
+      m_random(),
       m_currentSpeed(
         ins.config.float_("PLAYER_START_SPEED"),
         0.f
@@ -35,7 +36,8 @@ namespace jam
         0.f, // startTorgue
         100.f, // maxAlpha
         0.f // minAlpha
-      )
+      ),
+      m_bottleSound(ins.resourceManager.GetSoundBuffer("Yeah.wav"))
   {
     setScale(5.f, 5.f);
     m_jumpPressed = false;
@@ -88,7 +90,9 @@ namespace jam
   {
     if (bottle.getGlobalBounds().intersects(getGlobalBounds())) {
       bottle.setActive(false);
-
+      float pitch = 1 + (m_random(-0.3f, 0.3f));
+      m_bottleSound.setPitch(pitch);
+      m_bottleSound.play();
       return true;
     }
 
