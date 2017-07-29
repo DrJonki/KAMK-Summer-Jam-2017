@@ -83,7 +83,13 @@ namespace jam
 
     // Center camera on player
     auto view = getView();
-    view.setCenter(m_player->getPosition().x, m_player->getPosition().y - conf.float_("VIEW_Y") * 0.5f + conf.float_("GROUND_LEVEL"));
+    view.setCenter(
+      m_player->getPosition().x,
+      std::min(
+        conf.float_("VIEW_Y") * 0.5f,
+        m_player->getPosition().y
+      )
+    );
     setView(view);
 
     // Update background positions
@@ -95,7 +101,7 @@ namespace jam
     const int currentStageX = static_cast<unsigned int>((view.getCenter().x + (conf.float_("VIEW_X") * 0.5f)) / conf.float_("VIEW_X"));
     const int currentStageY = std::abs(static_cast<int>((view.getCenter().y - (conf.float_("VIEW_Y") * 0.5f)) / conf.float_("VIEW_Y")));
     const bool inSky = currentStageY > 0;
-    std::cout << "stages: [" << currentStageX << ", " << currentStageY << "]" << std::setw(10) << "\r";
+    std::cout << "Stage: [" << currentStageX << ", " << currentStageY << "]" << std::setw(100) << "\r";
 
     BackgroundSprite* bgs[] = {
       static_cast<BackgroundSprite*>(m_backgroundLayer.get("bg-sky-tl")),
