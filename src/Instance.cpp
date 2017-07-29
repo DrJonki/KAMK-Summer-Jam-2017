@@ -5,9 +5,13 @@
 namespace jam
 {
   Instance::Instance()
-    : window(sf::VideoMode(800, 600), "Jam")
+    : config(),
+      window(sf::VideoMode(config.integer("VIEW_X"), config.integer("VIEW_Y")), "Jam"),
+      currentScene(),
+      resourceManager(),
+      m_clock()
   {
-    auto asdf = config.boolean("bool");
+    
   }
 
   Instance::~Instance()
@@ -16,7 +20,10 @@ namespace jam
   void Instance::operator ()()
   {
     if (currentScene)
-      currentScene->update(m_clock.restart().asSeconds());
+      currentScene->update(
+        m_clock.restart().asSeconds() *
+        config.float_("SPEED_MULT") // Global game speed multiplier
+      );
 
     window.clear();
 
@@ -33,6 +40,16 @@ namespace jam
       case sf::Event::Closed:
         window.close();
         break;
+      case sf::Event::Resized:
+      {
+        const auto view = window.getView().getSize();
+        const auto ratio = view.x / view.y;
+        window.setSize(sf::Vector2u(
+          static_cast<unsigned int>(window.getSize().y * ratio),
+          window.getSize().y
+        ));
+        break;
+      }
       }
     }
   }

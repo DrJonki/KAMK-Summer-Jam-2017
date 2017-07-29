@@ -16,10 +16,11 @@ namespace jam
       // Entities
       m_player(nullptr)
   {
-    setView(sf::View(
-      sf::Vector2f(ins.window.getSize() / 2u),
-      sf::Vector2f(ins.window.getSize())
+    const sf::Vector2f viewSize(sf::Vector2u(
+      ins.config.integer("VIEW_X"),
+      ins.config.integer("VIEW_Y")
     ));
+    setView(sf::View(viewSize * 0.5f, viewSize));
     m_backgroundLayer.setSharedView(&getView());
     m_gameLayer.setSharedView(&getView());
 
@@ -27,12 +28,14 @@ namespace jam
     for (int i = -1; i < 10; ++i) {
       auto& spr = m_backgroundLayer.insert<BackgroundSprite>("Background-" + std::to_string(i), ins);
       spr.setPosition(static_cast<float>(i * static_cast<int>(ins.window.getSize().x)), 0.f);
+
+
     }
 
     // Player
-    m_player = &m_gameLayer.insert<Player>("Player");
+    m_player = &m_gameLayer.insert<Player>("Player", ins);
     m_player->setOrigin(0.f, m_player->getSize().y);
-    m_player->setPosition(0.f, getView().getSize().y - m_player->getSize().y);
+    m_player->setPosition(0.f, ins.config.float_("GROUND_LEVEL"));
   }
 
   void GameScene::update(const float dt)

@@ -1,10 +1,11 @@
 #include <Jam/Entities/Player.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <Jam/Instance.hpp>
 
 namespace jam
 {
-  Player::Player()
+  Player::Player(Instance& ins)
     : Entity(),
       sf::RectangleShape(sf::Vector2f(50.f, 50.f)),
       m_currentSpeed(250.f),

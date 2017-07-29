@@ -8,7 +8,7 @@ namespace jam
 {
   ConfigManager::ConfigManager()
   {
-    std::ifstream file("config.txt");
+    std::ifstream file("assets/config.txt");
     assert(file.good());
 
     std::string line;
@@ -16,7 +16,7 @@ namespace jam
     {
       std::istringstream is_line(line);
       std::string key;
-      if (std::getline(is_line, key, '='))
+      if (std::getline(is_line, key, '=') && key[0] != '#')
       {
         std::string value;
         if (std::getline(is_line, value))
@@ -41,7 +41,7 @@ namespace jam
 
   float ConfigManager::float_(const std::string& key) const
   {
-    return std::atof(string(key).c_str());
+    return static_cast<float>(std::atof(string(key).c_str()));
   }
 
   bool ConfigManager::boolean(const std::string& key) const

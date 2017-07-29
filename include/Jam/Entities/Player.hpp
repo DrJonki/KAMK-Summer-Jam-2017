@@ -5,11 +5,13 @@
 
 namespace jam
 {
+  class Instance;
+
   class Player final : public Entity, public sf::RectangleShape
   {
   public:
 
-    Player();
+    Player(Instance& ins);
 
     void update(const float dt) override;
 

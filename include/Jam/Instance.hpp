@@ -26,10 +26,10 @@ namespace jam
   public:
 
     // Globals
+    ConfigManager config;
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
     ResourceManager resourceManager;
-    ConfigManager config;
 
   private:
 
