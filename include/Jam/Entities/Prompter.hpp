@@ -29,5 +29,6 @@ namespace jam
     sf::Keyboard::Key m_key;
     sf::Sprite m_indicator;
     bool m_success;
+    float m_timer;
   };
 }

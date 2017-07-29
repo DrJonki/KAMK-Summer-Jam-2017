@@ -46,10 +46,10 @@ namespace jam
     target.draw(*this);
   }
 
-  bool Player::collide(const Bottle& bottle)
+  bool Player::collide(Bottle& bottle)
   {
     if (bottle.getGlobalBounds().intersects(getGlobalBounds())) {
-
+      bottle.setActive(false);
 
       return true;
     }

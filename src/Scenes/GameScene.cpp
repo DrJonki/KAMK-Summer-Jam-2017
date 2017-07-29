@@ -4,7 +4,9 @@
 #include <Jam/Entities/Player.hpp>
 #include <Jam/ParticleEmitter.hpp>
 #include <Jam/Entities/Bottle.hpp>
+#include <Jam/Entities/Prompter.hpp>
 #include <Jam/Entities/BackgroundSprite.hpp>
+#include <Jam/Randomizer.hpp>
 #include <iostream>
 #include <iomanip>
 
@@ -28,8 +30,11 @@ namespace jam
     ));
     setView(sf::View(-viewSize * 0.5f, viewSize));
     m_backgroundLayer.setSharedView(&getView());
+    m_pickupLayer.setSharedView(&getView());
     m_gameLayer.setSharedView(&getView());
     m_particleLayer.setSharedView(&getView());
+
+    const auto groundLevel = viewSize.y - ins.config.float_("GROUND_LEVEL");
 
     // Background sprites
     // Sky
@@ -74,6 +79,25 @@ namespace jam
       bg.setOrigin(sf::Vector2f(origins[i % 2] * bg.getSize().x, 0.f));
     }
 
+    const auto stageAmount = ins.config.integer("NUM_X_STAGES");
+    
+    // Prompters
+    for (std::size_t i = 0; i < stageAmount - 1u; ++i) {
+      auto& prompter = m_pickupLayer.insert<Prompter>("Prompter", ins);
+      prompter.setPosition(i * viewSize.x, groundLevel);
+    }
+
+    // Bottles
+    {
+      float advance = 0.f;
+      Randomizer rand;
+      while (advance < (stageAmount - 1u) * viewSize.x) {
+        auto& bottle = m_pickupLayer.insert<Bottle>("Bottle", ins);
+        advance += rand(1, 6) * (viewSize.x / 6.f);
+        bottle.setPosition(advance, viewSize.y - rand(1, 2) * ins.config.float_("GROUND_LEVEL") * 2);
+      }
+    }
+
     // Particle
     m_particleEmitter = &m_particleLayer.insert<ParticleEmitter>(
       "ParticleEmitter01",
@@ -91,7 +115,7 @@ namespace jam
 
     m_player = &m_gameLayer.insert<Player>("Player", ins);
     m_player->setOrigin(m_player->getSize().x * 0.5f, m_player->getSize().y);
-    m_player->setPosition(0.f, viewSize.y - ins.config.float_("GROUND_LEVEL"));
+    m_player->setPosition(0.f, groundLevel);
   }
 
   void GameScene::update(const float dt)
@@ -129,7 +153,7 @@ namespace jam
     };
 
     if (!inSky) {
-      const auto transitionAfter = conf.integer("GROUND_AMOUNT");
+      const auto transitionAfter = conf.integer("NUM_X_STAGES");
       char* left = "";
       char* right = "";
       // Beach -> water transition
@@ -158,6 +182,15 @@ namespace jam
         -conf.float_("VIEW_Y") * currentStageY
       );
       bgs[i]->setActive(true);
+    }
+
+    // Collisions
+    for (auto& i : m_pickupLayer.getAll("Prompter")) {
+      m_player->collide(*static_cast<Prompter*>(i));
+    }
+
+    for (auto& i : m_pickupLayer.getAll("Bottle")) {
+      m_player->collide(*static_cast<Bottle*>(i));
     }
   }
 }
