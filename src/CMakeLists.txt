@@ -14,6 +14,8 @@ set(SRC
   ${SRCDIR}/ResourceManager.cpp
   ${INCDIR}/AnimatedSprite.hpp
   ${SRCDIR}/AnimatedSprite.cpp
+  ${INCDIR}/ParticleEmitter.hpp
+  ${SRCDIR}/ParticleEmitter.cpp
   ${INCDIR}/Layer.hpp
   ${SRCDIR}/Layer.cpp
   ${INCDIR}/Scene.hpp
@@ -29,6 +31,8 @@ set(SRC
   ${SRCDIR}/Entities/Player.cpp
   ${INCDIR}/Entities/Bottle.hpp
   ${SRCDIR}/Entities/Bottle.cpp
+  ${INCDIR}/Entities/Particle.hpp
+  ${SRCDIR}/Entities/Particle.cpp
 
   # Scenes
   ${INCDIR}/Scenes/GameScene.hpp

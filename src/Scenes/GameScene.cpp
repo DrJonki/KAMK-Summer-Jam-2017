@@ -2,6 +2,7 @@
 #include <Jam/Layer.hpp>
 #include <Jam/Instance.hpp>
 #include <Jam/Entities/Player.hpp>
+#include <Jam/ParticleEmitter.hpp>
 #include <Jam/Entities/Bottle.hpp>
 #include <Jam/Entities/BackgroundSprite.hpp>
 #include <iostream>
@@ -12,12 +13,13 @@ namespace jam
   GameScene::GameScene(Instance& ins)
     : Scene(ins),
 
-      // Layers
-      m_backgroundLayer(addLayer(50)),
-      m_gameLayer(addLayer(100)),
+    // Layers
+    m_backgroundLayer(addLayer(50)),
+    m_gameLayer(addLayer(100)),
+    m_particleLayer(addLayer(200)),
 
-      // Entities
-      m_player(nullptr)
+    // Entities
+    m_player(nullptr)
   {
     const sf::Vector2f viewSize(sf::Vector2u(
       ins.config.integer("VIEW_X"),
@@ -26,6 +28,7 @@ namespace jam
     setView(sf::View(-viewSize * 0.5f, viewSize));
     m_backgroundLayer.setSharedView(&getView());
     m_gameLayer.setSharedView(&getView());
+    m_particleLayer.setSharedView(&getView());
 
     // Background sprites
     // Sky
@@ -70,7 +73,16 @@ namespace jam
       bg.setOrigin(sf::Vector2f(origins[i % 2] * bg.getSize().x, 0.f));
     }
 
-    // Player
+    // Particle
+    m_particleEmitter = &m_particleLayer.insert<ParticleEmitter>(
+      "ParticleEmitter01",
+      ins,
+      "test.png",
+      sf::Vector2f(50, 50),
+      10000,
+      0.25f
+    );
+
     m_player = &m_gameLayer.insert<Player>("Player", ins);
     m_player->setOrigin(m_player->getSize().x * 0.5f, m_player->getSize().y);
     m_player->setPosition(0.f, viewSize.y - ins.config.float_("GROUND_LEVEL"));
