@@ -66,4 +66,9 @@ namespace jam
     return m_frameSpeed;
   }
 
+  int AnimatedSprite::getCurFrame()
+  {
+    return m_curFrame;
+  }
+
 }

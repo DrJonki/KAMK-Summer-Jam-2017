@@ -2,8 +2,11 @@
 
 #include <Jam/Entity.hpp>
 #include <Jam/AnimatedSprite.hpp>
+<<<<<<< HEAD
 #include <SFML/Audio/Sound.hpp>
+=======
 #include <Jam/ParticleEmitter.hpp>
+>>>>>>> 343d44fca3075ea793eb17ce8de399ab0b87db26
 
 namespace jam
 {
@@ -33,11 +36,14 @@ namespace jam
     Instance& m_instance;
     GameScene& m_scene;
     sf::Vector2f m_currentSpeed;
+<<<<<<< HEAD
 
     // Soundsource
-    ParticleEmitter m_runParticle;
-    bool m_jumpPressed;
     sf::Sound m_runSound;
     sf::Sound m_chargeSound;
+=======
+    ParticleEmitter m_runParticle;
+    bool m_jumpPressed;
+>>>>>>> 343d44fca3075ea793eb17ce8de399ab0b87db26
   };
 }

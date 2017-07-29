@@ -21,6 +21,7 @@ namespace jam
     void resetAnimation();
     void setSpeed(float speed);
     float getSpeed();
+    int getCurFrame();
 
   private:
     int m_frameWidth;

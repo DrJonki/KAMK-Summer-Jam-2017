@@ -49,9 +49,13 @@ namespace jam
 
     // Entities
     Player* m_player;
+<<<<<<< HEAD
+    ParticleEmitter* m_particleEmitter;
 
     // Stats
     Text* m_scoreText;
     int m_score;
+=======
+>>>>>>> 343d44fca3075ea793eb17ce8de399ab0b87db26
   };
 }

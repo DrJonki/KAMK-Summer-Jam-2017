@@ -27,10 +27,15 @@ namespace jam
       float minAlpha = 0.f
     );
 
+    void emit();
+    void setPosition(sf::Vector2f emitPosition);
+    void stop();
+
     void update(const float dt) override;
 
     void draw(sf::RenderTarget& target) override;
 
+    bool isStartedEmitting;
     bool isDone;
 
   private:
@@ -38,6 +43,7 @@ namespace jam
     std::vector<Particle> m_particles;
     sf::Texture& m_texture;
     sf::Vector2f m_textureSize;
+    sf::Vector2f m_emitPosition;
     float m_emitTime;
     float m_curTime;
     float m_lifeTime;
