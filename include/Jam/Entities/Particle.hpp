@@ -12,8 +12,8 @@ namespace jam
 
     Particle(
       sf::Texture& texture,
-      int width,
-      int height,
+      float width,
+      float height,
       sf::Vector2f startPosition,
       float lifetime,
       float startSpeed,
@@ -29,8 +29,8 @@ namespace jam
   private:
     Randomizer m_random;
 
-    int m_width;
-    int m_height;
+    float m_width;
+    float m_height;
 
     sf::Vector2f m_startPosition;
 

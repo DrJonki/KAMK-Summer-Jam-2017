@@ -32,26 +32,40 @@ namespace jam
     m_particles.reserve(maxParticles);
   }
 
-  void ParticleEmitter::emit(sf::Vector2f emitPosition)
+  void ParticleEmitter::emit()
   {
+    stop();
     isStartedEmitting = true;
     isDone = false;
+  }
+
+  void ParticleEmitter::setPosition(sf::Vector2f emitPosition)
+  {
     m_emitPosition = emitPosition;
+  }
+
+  void ParticleEmitter::stop()
+  {
+    isStartedEmitting = false;
+    isDone = false;
+    m_curTime = 0.f;
   }
 
   void ParticleEmitter::update(const float dt)
   {
+    // particle deleter
+    m_particles.erase(std::remove_if(m_particles.begin(), m_particles.end(), [dt](Particle& particle) {
+      particle.update(dt);
+      return particle.isDone;
+    }), m_particles.end());
+
+    // spawn handler
     if (isStartedEmitting)
     {
-      m_particles.erase(std::remove_if(m_particles.begin(), m_particles.end(), [dt](Particle& particle) {
-        particle.update(dt);
-        return particle.isDone;
-      }), m_particles.end());
-
       m_curTime += dt;
       if (m_particles.size() < m_particles.capacity())
       {
-        if (m_curTime < m_emitTime) {
+        if (m_curTime < m_emitTime || m_emitTime <= 0.f) {
           m_particles.push_back(Particle(
             m_texture,
             m_textureSize.x,
@@ -71,14 +85,14 @@ namespace jam
             isDone = true;
         }
       }
-
-      for (auto& particle : m_particles) {
-        particle.update(dt);
-      }
+    }
+    // update movement
+    for (auto& particle : m_particles) {
+      particle.update(dt);
     }
   }
 
-  void ParticleEmitter::draw(sf::RenderTarget & target)
+  void ParticleEmitter::draw(sf::RenderTarget& target)
   {
     for (auto& particle : m_particles) {
       target.draw(particle);

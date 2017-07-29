@@ -27,7 +27,9 @@ namespace jam
       float minAlpha = 0.f
     );
 
-    void emit(sf::Vector2f emitPosition);
+    void emit();
+    void setPosition(sf::Vector2f emitPosition);
+    void stop();
 
     void update(const float dt) override;
 

@@ -26,6 +26,5 @@ namespace jam
 
     // Entities
     Player* m_player;
-    ParticleEmitter* m_particleEmitter;
   };
 }

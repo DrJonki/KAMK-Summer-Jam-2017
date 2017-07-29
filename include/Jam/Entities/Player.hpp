@@ -2,6 +2,7 @@
 
 #include <Jam/Entity.hpp>
 #include <Jam/AnimatedSprite.hpp>
+#include <Jam/ParticleEmitter.hpp>
 
 namespace jam
 {
@@ -27,5 +28,7 @@ namespace jam
 
     Instance& m_instance;
     sf::Vector2f m_currentSpeed;
+    ParticleEmitter m_runParticle;
+    bool m_jumpPressed;
   };
 }

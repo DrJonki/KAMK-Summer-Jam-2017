@@ -3,8 +3,8 @@
 namespace jam {
   Particle::Particle(
     sf::Texture& texture,
-    int width,
-    int height,
+    float width,
+    float height,
     sf::Vector2f startPosition,
     float lifetime,
     float startSpeed,
@@ -30,7 +30,7 @@ namespace jam {
     setTexture(texture);
     setRotation(startAngle);
     setPosition(m_startPosition);
-    setOrigin(sf::Vector2f(m_width / 2, m_height / 2));
+    setOrigin(sf::Vector2f(m_width / 2.f, m_height / 2.f));
   }
 
   void Particle::update(const float dt)
@@ -56,7 +56,7 @@ namespace jam {
     float alpha = glm::clamp(what, 0.f, 255.f);
     if (alpha <= 0)
       alpha = 0;
-    setColor(sf::Color(255, 255, 255, alpha));
+    setColor(sf::Color(255, 255, 255, (int)alpha));
   }
 
 }

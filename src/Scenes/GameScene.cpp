@@ -2,14 +2,12 @@
 #include <Jam/Layer.hpp>
 #include <Jam/Instance.hpp>
 #include <Jam/Entities/Player.hpp>
-#include <Jam/ParticleEmitter.hpp>
 #include <Jam/Entities/Bottle.hpp>
 #include <Jam/Entities/Prompter.hpp>
 #include <Jam/Entities/BackgroundSprite.hpp>
 #include <Jam/Randomizer.hpp>
 #include <iostream>
 #include <iomanip>
-#include <SFML/Window/Keyboard.hpp>
 
 namespace jam
 {
@@ -99,21 +97,6 @@ namespace jam
       }
     }
 
-    // Particle
-    m_particleEmitter = &m_particleLayer.insert<ParticleEmitter>(
-      "ParticleEmitter01",
-      ins, // instance
-      "test.png", // texturePath
-      sf::Vector2f(50, 50), // textureSize
-      100, // maxParticles
-      1.f, // emitTime
-      1.f, // lifeTime
-      0.25f, // startspeed
-      100.f, // friction
-      0.f, // startAngle
-      0.25f // startTorgue
-    );
-
     m_player = &m_gameLayer.insert<Player>("Player", ins);
     m_player->setOrigin(m_player->getLocalBounds().width * 0.5f, m_player->getLocalBounds().height);
     m_player->setPosition(0.f, groundLevel);
@@ -136,10 +119,6 @@ namespace jam
       )
     );
     setView(view);
-
-    // Particle emit test
-    if (Keyboard::isKeyPressed(Keyboard::Space))
-      m_particleEmitter->emit(m_player->getPosition());
 
     // Update background positions
     const auto all = m_backgroundLayer.getAll();
