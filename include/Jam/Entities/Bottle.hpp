@@ -16,5 +16,8 @@ namespace jam
 
     void draw(sf::RenderTarget& target) override;
 
+  private:
+
+    float m_timer;
   };
 }

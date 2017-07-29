@@ -18,6 +18,8 @@ sf::Keyboard::Key getRandomKey() {
 const char* getKeyTexture(const sf::Keyboard::Key key) {
   using Key = sf::Keyboard::Key;
 
+  return "test.png";
+
   switch (key)
   {
   case Key::Left:
@@ -41,9 +43,11 @@ namespace jam
       sf::Sprite(),
       m_key(getRandomKey()),
       m_indicator(ins.resourceManager.GetTexture(getKeyTexture(m_key))),
-      m_success(false)
+      m_success(false),
+      m_timer(0.f)
   {
-    
+    const auto bounds = m_indicator.getGlobalBounds();
+    m_indicator.setOrigin(bounds.width * 0.5f, bounds.height * 0.5f);
   }
 
   void Prompter::setSuccess()
@@ -63,11 +67,22 @@ namespace jam
 
   void Prompter::update(const float dt)
   {
+    const float floatRange = 10.f;
+    const float floatSpeed = 5.f;
+    const float floatOffset = -100.f;
 
+    m_indicator.setPosition(
+      0.f,
+      floatOffset + std::sin((m_timer += dt) * floatSpeed) * floatRange
+    );
   }
 
   void Prompter::draw(sf::RenderTarget& target)
   {
     target.draw(*this);
+
+    sf::RenderStates states = sf::RenderStates::Default;
+    states.transform = getTransform();
+    target.draw(m_indicator, states);
   }
 }

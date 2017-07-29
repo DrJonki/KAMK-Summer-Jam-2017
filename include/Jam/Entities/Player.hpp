@@ -19,7 +19,7 @@ namespace jam
 
     void draw(sf::RenderTarget& target) override;
 
-    bool collide(const Bottle& bottle);
+    bool collide(Bottle& bottle);
 
     bool collide(Prompter& prompter);
 
