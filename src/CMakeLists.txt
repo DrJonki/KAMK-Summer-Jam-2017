@@ -18,6 +18,9 @@ set(SRC
   ${SRCDIR}/Layer.cpp
   ${INCDIR}/Scene.hpp
   ${SRCDIR}/Scene.cpp
+  ${INCDIR}/Randomizer.hpp
+  ${INCDIR}/Randomizer.inl
+  ${SRCDIR}/Randomizer.cpp
 
   # Entities
   ${INCDIR}/Entities/BackgroundSprite.hpp
