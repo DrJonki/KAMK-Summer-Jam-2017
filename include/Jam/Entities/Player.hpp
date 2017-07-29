@@ -19,7 +19,7 @@ namespace jam
 
   private:
 
-    float m_currentSpeed;
-    float m_jumpAccel;
+    Instance& m_instance;
+    sf::Vector2f m_currentSpeed;
   };
 }

@@ -35,6 +35,8 @@ namespace jam
 
     std::vector<Entity*> getAll(const std::string& name) const;
 
+    std::vector<Entity*> getAll() const;
+
     void update(const float dt);
 
     void draw(sf::RenderTarget& target);

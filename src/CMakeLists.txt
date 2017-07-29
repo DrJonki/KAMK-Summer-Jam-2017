@@ -14,10 +14,15 @@ set(SRC
   ${SRCDIR}/ResourceManager.cpp
   ${INCDIR}/AnimatedSprite.hpp
   ${SRCDIR}/AnimatedSprite.cpp
+  ${INCDIR}/ParticleEmitter.hpp
+  ${SRCDIR}/ParticleEmitter.cpp
   ${INCDIR}/Layer.hpp
   ${SRCDIR}/Layer.cpp
   ${INCDIR}/Scene.hpp
   ${SRCDIR}/Scene.cpp
+  ${INCDIR}/Randomizer.hpp
+  ${INCDIR}/Randomizer.inl
+  ${SRCDIR}/Randomizer.cpp
 
   # Entities
   ${INCDIR}/Entities/BackgroundSprite.hpp
@@ -26,6 +31,8 @@ set(SRC
   ${SRCDIR}/Entities/Player.cpp
   ${INCDIR}/Entities/Bottle.hpp
   ${SRCDIR}/Entities/Bottle.cpp
+  ${INCDIR}/Entities/Particle.hpp
+  ${SRCDIR}/Entities/Particle.cpp
 
   # Scenes
   ${INCDIR}/Scenes/GameScene.hpp
@@ -74,6 +81,8 @@ if (MSVC)
     winmm.lib
     gdi32.lib
   )
+
+  set_target_properties(Jam PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")
 endif()
 
 add_custom_command(TARGET Jam POST_BUILD

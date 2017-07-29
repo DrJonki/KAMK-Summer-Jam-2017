@@ -4,13 +4,14 @@
 
 namespace jam
 {
-  BackgroundSprite::BackgroundSprite(Instance& ins)
+  BackgroundSprite::BackgroundSprite(Instance& ins, const std::string& texture)
     : Entity(),
-      sf::RectangleShape(sf::Vector2f(ins.window.getSize()))
+      sf::RectangleShape(sf::Vector2f(
+        ins.config.float_("VIEW_X"),
+        ins.config.float_("VIEW_Y")
+      ))
   {
-    auto& tex = ins.resourceManager.GetTexture("Beach_BG_Pixelated.png");
-
-    setTexture(&tex);
+    setTexture(&ins.resourceManager.GetTexture(texture));
   }
 
   void BackgroundSprite::update(const float dt)
