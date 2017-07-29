@@ -2,27 +2,34 @@
 #include <SFML/Window/Keyboard.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <Jam/Instance.hpp>
+#include <Jam/Scenes/GameScene.hpp>
 #include <Jam/Entities/Bottle.hpp>
 #include <Jam/Entities/Prompter.hpp>
 
 namespace jam
 {
-  Player::Player(Instance& ins)
+  Player::Player(Instance& ins, GameScene& scene)
     : Entity(),
       AnimatedSprite(
         ins.resourceManager.GetTexture("Sprites/PlayerOne.png"),
         16,
         16,
         3,
-        0.25f
+        0.05f
       ),
       m_instance(ins),
+      m_scene(scene),
       m_currentSpeed(
         ins.config.float_("PLAYER_START_SPEED"),
         0.f
-      )
+      ),
+      m_runSound(ins.resourceManager.GetSoundBuffer("Run.wav"))
   {
     setScale(5.f, 5.f);
+
+    m_runSound.setRelativeToListener(true);
+    m_runSound.setLoop(true);
+    m_runSound.play();
   }
 
   void Player::update(const float dt)
@@ -36,12 +43,32 @@ namespace jam
     static const auto jumpForce = m_instance.config.float_("PLAYER_JUMP_FORCE");
     static const auto viewY = m_instance.config.float_("VIEW_Y");
 
-    m_currentSpeed.y += gravity * dt;
+    switch (m_scene.getState()) {
+    case GameScene::State::Running:
+    {
+      m_runSound.setVolume(100.f);
 
-    if (getPosition().y >= viewY - ground - 1.f) {
-      m_currentSpeed.y = 0.f;
-      if (Keyboard::isKeyPressed(Keyboard::Space))
-        m_currentSpeed.y = -jumpForce;
+      m_currentSpeed.y += gravity * dt;
+
+      if (getPosition().y >= viewY - ground - 1.f) {
+        m_currentSpeed.y = 0.f;
+        if (Keyboard::isKeyPressed(Keyboard::Space))
+          m_currentSpeed.y = -jumpForce;
+      }
+      break;
+    }
+
+    case GameScene::State::BeforeJump:
+    {
+      m_runSound.setVolume(0.f);
+
+      break;
+    }
+
+    case GameScene::State::Jumped:
+    {
+      break;
+    }
     }
 
     move(m_currentSpeed * dt);
@@ -78,5 +105,14 @@ namespace jam
     }
 
     return false;
+  }
+
+  void Player::jump()
+  {
+    static const float jumpX = m_instance.config.float_("PLAYER_FINAL_JUMP_X");
+    static const float jumpY = m_instance.config.float_("PLAYER_FINAL_JUMP_Y");
+
+    m_currentSpeed.x = jumpX;
+    m_currentSpeed.y = jumpY;
   }
 }

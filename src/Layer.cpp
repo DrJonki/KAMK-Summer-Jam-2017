@@ -64,7 +64,8 @@ namespace jam
     auto range = m_entities.equal_range(name);
     std::vector<Entity*> entities;
     for (auto itr = range.first; itr != range.second; ++itr) {
-      entities.push_back(itr->second.get());
+      if (itr->second->isActive())
+        entities.push_back(itr->second.get());
     }
     return entities;
   }
@@ -73,7 +74,8 @@ namespace jam
   {
     std::vector<Entity*> entities;
     for (auto& i : m_entities) {
-      entities.push_back(i.second.get());
+      if (i.second->isActive())
+        entities.push_back(i.second.get());
     }
     return entities;
   }

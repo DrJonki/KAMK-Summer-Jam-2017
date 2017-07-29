@@ -54,6 +54,8 @@ namespace jam
     setTexture(ins.resourceManager.GetTexture(getPromptTexture(m_key, true)));
     setOrigin(getLocalBounds().width * 0.5f, getLocalBounds().height);
     setScale(2.f, 2.f);
+
+    m_indicator.setScale(0.75f, 0.75f);
   }
 
   void Prompter::setSuccess()
@@ -73,7 +75,7 @@ namespace jam
 
   void Prompter::update(const float dt)
   {
-    const float floatRange = 8.f;
+    const float floatRange = 6.f;
     const float floatSpeed = 5.f;
     const float floatOffset = -50.f;
 

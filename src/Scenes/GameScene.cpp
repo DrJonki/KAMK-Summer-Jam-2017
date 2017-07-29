@@ -5,6 +5,7 @@
 #include <Jam/ParticleEmitter.hpp>
 #include <Jam/Entities/Bottle.hpp>
 #include <Jam/Entities/Prompter.hpp>
+#include <Jam/Entities/Text.hpp>
 #include <Jam/Entities/BackgroundSprite.hpp>
 #include <Jam/Randomizer.hpp>
 #include <iostream>
@@ -15,14 +16,25 @@ namespace jam
   GameScene::GameScene(Instance& ins)
     : Scene(ins),
 
+    m_currentState(State::Running),
+
+    // Sounds
+    m_runMusic(),
+    m_jumpMusic(),
+
     // Layers
     m_backgroundLayer(addLayer(50)),
     m_pickupLayer(addLayer(75)),
     m_gameLayer(addLayer(100)),
     m_particleLayer(addLayer(200)),
+    m_uiLayer(addLayer(250)),
 
     // Entities
-    m_player(nullptr)
+    m_player(nullptr),
+
+    // Stats
+    m_scoreText(nullptr),
+    m_score(0)
   {
     const sf::Vector2f viewSize(sf::Vector2u(
       ins.config.integer("VIEW_X"),
@@ -33,8 +45,25 @@ namespace jam
     m_pickupLayer.setSharedView(&getView());
     m_gameLayer.setSharedView(&getView());
     m_particleLayer.setSharedView(&getView());
+    m_uiLayer.setView(sf::View(viewSize * 0.5f, viewSize));
 
     const auto groundLevel = viewSize.y - ins.config.float_("GROUND_LEVEL");
+
+    // Audio
+    m_runMusic.openFromFile("assets/Audio/Music.wav");
+    m_runMusic.setLoop(true);
+    m_runMusic.setRelativeToListener(true);
+    m_runMusic.setVolume(50.f);
+    m_runMusic.play();
+
+    m_jumpMusic.openFromFile("assets/Audio/FlyMusic.wav");
+    m_jumpMusic.setLoop(true);
+    m_jumpMusic.setRelativeToListener(true);
+    m_jumpMusic.setVolume(75.f);
+
+    m_buildUp.openFromFile("assets/Audio/Buildup.wav");
+    m_buildUp.setRelativeToListener(true);
+    m_buildUp.setVolume(75.f);
 
     // Background sprites
     // Sky
@@ -94,7 +123,7 @@ namespace jam
       while (advance < (stageAmount - 1u) * viewSize.x) {
         auto& bottle = m_pickupLayer.insert<Bottle>("Bottle", ins);
         advance += rand(1, 6) * (viewSize.x / 6.f);
-        bottle.setPosition(advance, viewSize.y - rand(1, 2) * ins.config.float_("GROUND_LEVEL") * 2);
+        bottle.setPosition(advance, viewSize.y - rand(1, 2) * ins.config.float_("GROUND_LEVEL") * 2.5f);
       }
     }
 
@@ -113,9 +142,14 @@ namespace jam
       0.25f // startTorgue
     );
 
-    m_player = &m_gameLayer.insert<Player>("Player", ins);
+    m_player = &m_gameLayer.insert<Player>("Player", ins, *this);
     m_player->setOrigin(m_player->getLocalBounds().width * 0.5f, m_player->getLocalBounds().height);
     m_player->setPosition(0.f, groundLevel);
+
+    // Stats
+    m_scoreText = &m_uiLayer.insert<Text>("ScoreText");
+    m_scoreText->setFont(ins.resourceManager.GetFont("gamefont.ttf"));
+    m_scoreText->setFillColor(sf::Color::Black);
   }
 
   void GameScene::update(const float dt)
@@ -152,8 +186,9 @@ namespace jam
       static_cast<BackgroundSprite*>(m_backgroundLayer.get("bg-sky-br")),
     };
 
+    const auto transitionAfter = conf.integer("NUM_X_STAGES");
+
     if (!inSky) {
-      const auto transitionAfter = conf.integer("NUM_X_STAGES");
       char* left = "";
       char* right = "";
       // Beach -> water transition
@@ -184,13 +219,37 @@ namespace jam
       bgs[i]->setActive(true);
     }
 
+    if (getState() != State::Jumped && currentStageX >= transitionAfter && (view.getCenter().x + (conf.float_("VIEW_X") * 0.5f)) / conf.float_("VIEW_X") > (transitionAfter + 0.4f)) {
+      setState(State::BeforeJump);
+      m_runMusic.setVolume(std::max(0.f, m_runMusic.getVolume() - 5.f * dt));
+      if (m_jumpMusic.getStatus() != sf::Music::Status::Playing) {
+        m_jumpMusic.play();
+        m_buildUp.play();
+      }
+      /*if (m_buildUp.getStatus() == sf::Music::Status::Stopped)
+        setState(State::Jumped);*/
+    }
+
     // Collisions
     for (auto& i : m_pickupLayer.getAll("Prompter")) {
-      m_player->collide(*static_cast<Prompter*>(i));
+      m_score += m_player->collide(*static_cast<Prompter*>(i)) * 10;
     }
 
     for (auto& i : m_pickupLayer.getAll("Bottle")) {
-      m_player->collide(*static_cast<Bottle*>(i));
+      m_score += m_player->collide(*static_cast<Bottle*>(i)) * 10;
     }
+
+    // Stats
+    m_scoreText->setString("Score: " + std::to_string(m_score));
+  }
+
+  void GameScene::setState(const State state)
+  {
+    m_currentState = state;
+  }
+
+  GameScene::State GameScene::getState() const
+  {
+    return m_currentState;
   }
 }

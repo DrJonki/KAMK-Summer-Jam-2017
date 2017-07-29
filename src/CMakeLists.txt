@@ -35,6 +35,8 @@ set(SRC
   ${SRCDIR}/Entities/Particle.cpp
   ${INCDIR}/Entities/Prompter.hpp
   ${SRCDIR}/Entities/Prompter.cpp
+  ${INCDIR}/Entities/Text.hpp
+  ${SRCDIR}/Entities/Text.cpp
 
   # Scenes
   ${INCDIR}/Scenes/GameScene.hpp
