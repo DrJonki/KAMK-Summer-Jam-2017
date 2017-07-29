@@ -38,7 +38,10 @@ namespace jam
         0.f, // startTorgue
         100.f, // maxAlpha
         0.f // minAlpha
-      )
+      ),
+      m_stopped(false),
+      m_jumpPressed(false),
+      m_rotationSpeed(0.f)
   {
     setScale(5.f, 5.f);
 
@@ -63,47 +66,68 @@ namespace jam
     static const auto jumpForce = m_instance.config.float_("PLAYER_JUMP_FORCE");
     static const auto viewY = m_instance.config.float_("VIEW_Y");
 
-    switch (m_scene.getState()) {
-    case GameScene::State::Running:
-    {
-      m_runSound.setVolume(100.f);
-
-      m_currentSpeed.y += gravity * dt;
-
-      if (getPosition().y >= viewY - ground - 1.f) {
-        m_currentSpeed.y = 0.f;
-      // jump land effect
-      if (m_jumpPressed)
+    if (!m_stopped) {
+      switch (m_scene.getState()) {
+      case GameScene::State::Running:
       {
-        m_runParticle.emit();
-        m_jumpPressed = false;
+        m_runSound.setVolume(100.f);
+
+        m_currentSpeed.y += gravity * dt;
+
+        if (getPosition().y >= viewY - ground - 1.f) {
+          m_currentSpeed.y = 0.f;
+        // jump land effect
+        if (m_jumpPressed)
+        {
+          m_runParticle.emit();
+          m_jumpPressed = false;
+        }
+        // jump input
+          if (Keyboard::isKeyPressed(Keyboard::Space))
+        {
+            m_currentSpeed.y = -jumpForce;
+          m_jumpPressed = true;
+        }
+        }
+        break;
       }
-      // jump input
-        if (Keyboard::isKeyPressed(Keyboard::Space))
+
+      case GameScene::State::BeforeJump:
       {
-          m_currentSpeed.y = -jumpForce;
-        m_jumpPressed = true;
+        m_runSound.setVolume(0.f);
+        m_currentSpeed = sf::Vector2f();
+
+        break;
+      }
+
+      case GameScene::State::Jumped:
+      {
+        if (!m_justJumped) {
+          m_currentSpeed.y += gravity * dt;
+          m_currentSpeed.x = std::max(0.f, m_currentSpeed.x);
+
+          if (getPosition().y >= viewY - ground - 1.f) {
+            m_currentSpeed.y *= -0.65f;
+            m_currentSpeed.x *= 0.65f;
+            m_rotationSpeed += 90.f;
+          }
+
+          if (m_currentSpeed.y < 0.01f && m_currentSpeed.x < 0.01f)
+            m_stopped = true;
+        }
+        m_justJumped = false;
       }
       }
-      break;
     }
 
-    case GameScene::State::BeforeJump:
-    {
-      m_runSound.setVolume(0.f);
-
-      break;
+    if (m_stopped) {
+      setRotation(90.f);
     }
-
-    case GameScene::State::Jumped:
-    {
-      break;
+    else {
+      rotate(m_rotationSpeed * dt);      move(m_currentSpeed * dt);
+      setPosition(getPosition().x, std::min(viewY - ground, getPosition().y));
+      m_runParticle.setPosition(getPosition());
     }
-    }
-
-    move(m_currentSpeed * dt);
-    setPosition(getPosition().x, std::min(viewY - ground, getPosition().y));
-    m_runParticle.setPosition(getPosition());
   }
 
   void Player::draw(sf::RenderTarget& target)
@@ -145,6 +169,8 @@ namespace jam
     static const float jumpY = m_instance.config.float_("PLAYER_FINAL_JUMP_Y");
 
     m_currentSpeed.x = jumpX;
-    m_currentSpeed.y = jumpY;
+    m_currentSpeed.y = -jumpY;
+    m_justJumped = true;
+    m_rotationSpeed = 180.f;
   }
 }
