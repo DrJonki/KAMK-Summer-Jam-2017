@@ -60,7 +60,8 @@ namespace jam
       m_arrowBar(ins.resourceManager.GetTexture("arrowBar.png")),
       m_stopped(false),
       m_jumpPressed(false),
-      m_rotationSpeed(0.f)
+      m_rotationSpeed(0.f),
+      m_ouchSound(ins.resourceManager.GetSoundBuffer("auts2_louder.wav"))
   {
     setScale(5.f, 5.f);
 
@@ -71,6 +72,7 @@ namespace jam
     m_bottleSound.setRelativeToListener(true);
     m_finalJumpSound.setRelativeToListener(true);
     m_bottleSound.setRelativeToListener(true);
+    m_ouchSound.setRelativeToListener(true);
 
     m_arrow.setOrigin(0, m_arrow.getLocalBounds().height / 2);
     m_arrowBar.setOrigin(0, m_arrowBar.getLocalBounds().height / 2);
@@ -101,18 +103,19 @@ namespace jam
 
         if (getPosition().y >= viewY - ground - 1.f) {
           m_currentSpeed.y = 0.f;
-        // jump land effect
-        if (m_jumpPressed)
-        {
-          m_runParticle.emit();
-          m_jumpPressed = false;
-        }
-        // jump input
+
+          // jump land effect
+          if (m_jumpPressed)
+          {
+            m_runParticle.emit();
+            m_jumpPressed = false;
+          }
+          // jump input
           if (Keyboard::isKeyPressed(Keyboard::Space))
-        {
-            m_currentSpeed.y = -jumpForce;
-          m_jumpPressed = true;
-        }
+          {
+              m_currentSpeed.y = -jumpForce;
+              m_jumpPressed = true;
+          }
         }
 
         m_arrow_speed = 1250.f - m_currentSpeed.x;
@@ -170,6 +173,8 @@ namespace jam
             m_currentSpeed.y *= -0.65f;
             m_currentSpeed.x *= 0.65f;
             m_rotationSpeed += 90.f;
+            m_ouchSound.setPitch(m_random.range(0.7f, 1.5f));
+            m_ouchSound.play();
           }
 
           if (m_currentSpeed.y < 0.01f && m_currentSpeed.x < 0.01f)

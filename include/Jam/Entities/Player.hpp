@@ -48,6 +48,7 @@ namespace jam
     sf::Sound m_bottleSound;
     sf::Sound m_runSound;
     sf::Sound m_finalJumpSound;
+    sf::Sound m_ouchSound;
 
     // arrow
     sf::Sprite m_arrowBar;
@@ -58,5 +59,6 @@ namespace jam
     float m_arrow_angle_min = -70;
     float m_arrow_speed = 800.f;
     float m_arrow_locked = false;
+
   };
 }
