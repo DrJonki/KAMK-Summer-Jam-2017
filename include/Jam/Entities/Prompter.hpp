@@ -21,11 +21,14 @@ namespace jam
 
     bool success() const;
 
+    void setPlayerPos(sf::Vector2f pos);
+
     sf::Keyboard::Key promptKey() const;
 
   private:
 
     void update(const float dt) override;
+    float lerp(float value, float start, float end);
 
     void draw(sf::RenderTarget& target) override;
 
@@ -34,6 +37,8 @@ namespace jam
     sf::Sound m_clapSound;
     ParticleEmitter m_bottleParticle;
     Randomizer m_random;
+    sf::Vector2f m_playerPos;
+    float m_playerPosOffset;
     bool m_success;
     float m_timer;
   };
