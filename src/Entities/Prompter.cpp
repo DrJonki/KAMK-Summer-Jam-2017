@@ -81,7 +81,7 @@ namespace jam
   {
     m_bottleParticle.emit();
     float pitch = 1 + (m_random(-0.3f, 0.3f));
-    m_playerPosOffset = m_random(-30, 30);
+    m_playerPosOffset = m_random(-30.f, 30.f);
     m_clapSound.setPitch(pitch);
     m_clapSound.play();
     m_indicator.setScale(1.5f, 1.5f);

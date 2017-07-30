@@ -10,6 +10,9 @@
 #include <SFML/Network.hpp>
 #include <iostream>
 #include <iomanip>
+#include <cctype>
+#include <sstream>
+#include <string>
 
 namespace jam
 {
@@ -175,9 +178,11 @@ namespace jam
     m_leaderText->setFont(font);
     m_leaderText->setFillColor(sf::Color::Black);
     m_leaderText->setOutlineColor(sf::Color::White);
-    m_leaderText->setCharacterSize(16);
+    m_leaderText->setCharacterSize(24);
     m_leaderText->setOutlineThickness(2);
-    m_leaderText->setPosition(viewSize.x - 100, 0);
+    m_leaderText->setPosition(viewSize.x - 300, 0);
+    m_leaderText->setActive(false);
+    updateScores();
   }
 
   void GameScene::update(const float dt)
@@ -225,7 +230,7 @@ namespace jam
 
     const auto transitionAfter = conf.integer("NUM_X_STAGES");
 
-    if (getState() == State::Jumped)
+    if (getState() == State::Jumped && !m_player->isStopped())
       m_scoreExtra = currentStageX - transitionAfter;
 
     if (!inSky) {
@@ -284,7 +289,7 @@ namespace jam
     }
 
     for (auto& i : m_pickupLayer.getAll("Bottle")) {
-      m_score += m_player->collide(*static_cast<Bottle*>(i)) * 10;
+      m_score += m_player->collide(*static_cast<Bottle*>(i)) * 5;
     }
 
     // Stats
@@ -298,6 +303,7 @@ namespace jam
     m_endText->setActive(false);
     if (m_player->isStopped()) {
       m_scoreText->setActive(false);
+      m_leaderText->setActive(true);
 
       const sf::Vector2f viewSize(sf::Vector2u(
         conf.integer("VIEW_X"),
@@ -327,12 +333,97 @@ namespace jam
     return m_started;
   }
 
+  void GameScene::updateScores()
+  {
+    std::string str = "Highscores\n";
+    auto& hs = getInstance().highscores;
+    int num = 0;
+
+    std::vector<std::pair<std::string, int>> vals(hs.begin(), hs.end());
+    std::sort(vals.begin(), vals.end(), [](decltype(vals[0])& left, decltype(vals[0])& right) {
+      return left.second > right.second;
+    });
+
+    if (vals.size() > 10) {
+      vals.erase(vals.begin() + 9, vals.end());
+    }
+
+    for (auto itr = vals.begin(); itr != vals.end(); ++itr) {
+      str += '\n';
+      str += std::to_string(++num) + ". " + itr->first + " - " + std::to_string(itr->second);
+    }
+
+    m_leaderText->setString(str);
+  }
+
+
+  std::string url_encode(const std::string &value) {
+    using namespace std;
+    ostringstream escaped;
+    escaped.fill('0');
+    escaped << hex;
+
+    for (string::const_iterator i = value.begin(), n = value.end(); i != n; ++i) {
+      string::value_type c = (*i);
+
+      // Keep alphanumeric and other accepted characters intact
+      if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+        escaped << c;
+        continue;
+      }
+
+      // Any other characters are percent-encoded
+      escaped << uppercase;
+      escaped << '%' << setw(2) << int((unsigned char)c);
+      escaped << nouppercase;
+    }
+
+    return escaped.str();
+  }
+
   void GameScene::textEvent(const uint32_t code)
   {
-    if (m_player->isStopped()) {
+    if (m_player->isStopped() && !m_sendingScore) {
 
       if (code == 10 || code == 13) {
         m_sendingScore = true;
+        auto& hs = getInstance().highscores;
+        const auto finalScore = m_score + m_scoreExtra;
+        const char* errText = "Score is lower\n> than existing!";
+
+        if ((hs.find(m_nameText) == hs.end() && m_nameText != errText) || hs[m_nameText] < finalScore)
+        {
+          hs[m_nameText] = finalScore;
+
+          if (getInstance().sendPutRequest("https://kvstore.p.mashape.com/collections/scores/items/" + url_encode(m_nameText), std::to_string(finalScore)))
+            m_nameText = "Success!";
+          else
+            m_nameText = "Failed :(";
+
+          getInstance().m_clock.restart();
+        }
+        else
+        {
+          m_sendingScore = false;
+          m_nameText = errText;
+          return;
+        }
+
+        if (hs.size() > 10) {
+          int lowest = INT_MAX;
+          auto lowItr = hs.end();
+
+          for (auto itr = hs.begin(); itr != hs.end(); ++itr) {
+            if (itr->second < lowest) {
+              lowest = itr->second;
+              lowItr = itr;
+            }
+          }
+
+          hs.erase(lowItr);
+        }
+
+        updateScores();
 
         return;
       }

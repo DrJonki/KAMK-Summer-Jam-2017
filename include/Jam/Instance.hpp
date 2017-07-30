@@ -24,6 +24,10 @@ namespace jam
 
     void operator ()();
 
+    bool sendRequest(const std::string& url, std::string& res);
+
+    bool sendPutRequest(const std::string& url, const std::string& body);
+
   public:
 
     // Globals
@@ -31,11 +35,9 @@ namespace jam
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
     ResourceManager resourceManager;
-    std::set<int, std::string> highscores;
+    std::map<sf::String, int> highscores;
 
-    const std::string apiKey;
-
-  private:
+  public:
 
     sf::Clock m_clock;
   };

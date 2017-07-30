@@ -28,7 +28,13 @@ ExternalProject_Add(CURL
   INSTALL_COMMAND ""
 
   CMAKE_ARGS -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+             -DCMAKE_USE_WINSSL=ON
+             -DBUILD_TESTING=OFF
+             -DBUILD_CURL_EXE=OFF
+             -DCURL_STATICLIB=ON
 )
+ExternalProject_Get_Property(CURL SOURCE_DIR)
+include_directories(${SOURCE_DIR}/include)
 
 
 ExternalProject_Add(JSON

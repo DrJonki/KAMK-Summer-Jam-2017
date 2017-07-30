@@ -35,6 +35,8 @@ namespace jam
 
   private:
 
+    void updateScores();
+
     State m_currentState;
     bool m_started;
     bool m_sendingScore;
