@@ -191,7 +191,8 @@ namespace jam
       target,
       dt * 30.f
     );
-    view.setCenter(result.x, result.y);
+    screenShake(dt);
+    view.setCenter(result.x + m_shakePos.x, result.y + m_shakePos.y);
     setView(view);
 
     // Update background positions
@@ -266,8 +267,13 @@ namespace jam
     // Collisions
     for (auto& i : m_pickupLayer.getAll("Prompter")) {
       auto& prompter = *static_cast<Prompter*>(i);
-      m_score += m_player->collide(prompter) * 10;
-      if (prompter.success() && getState() != State::Jumped) {
+      if (m_player->collide(prompter))
+      {
+        m_score += 10;
+        m_isScreenShakeActive = true;
+      }
+      if (prompter.success() && getState() != State::Jumped)
+      {
         prompter.setPlayerPos(m_player->getPosition());
       }
     }
@@ -312,6 +318,29 @@ namespace jam
   bool GameScene::isStarted() const
   {
     return m_started;
+  }
+
+  void GameScene::screenShake(const float dt)
+  {
+    if (m_isScreenShakeActive)
+    {
+      m_screenShakeTimer += dt;
+      if (m_screenShakeTimer > 0.15f)
+      {
+        m_isScreenShakeActive = false;
+        m_screenShakeTimer = 0.f;
+        return;
+      }
+      Randomizer rand;
+      m_shakePos = sf::Vector2f(
+        rand(-10.2f, 10.2f),
+        rand(-10.2f, 10.2f)
+      );
+    }
+    else
+    {
+      m_shakePos = sf::Vector2f(0.f, 0.f);
+    }
   }
 
 }

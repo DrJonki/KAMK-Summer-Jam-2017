@@ -57,5 +57,11 @@ namespace jam
     Text* m_endText;
     int m_score;
     int m_scoreExtra;
+
+    void screenShake(const float dt);
+    float m_screenShakeTimer = 0.f;
+    bool m_isScreenShakeActive = false;
+    sf::Vector2f m_shakePos;
+
   };
 }
