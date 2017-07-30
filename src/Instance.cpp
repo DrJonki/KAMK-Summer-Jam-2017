@@ -133,7 +133,7 @@ namespace jam
 
       curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
-      curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
+      curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
 
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &res);

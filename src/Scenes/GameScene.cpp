@@ -162,8 +162,13 @@ namespace jam
     m_startText->setFillColor(sf::Color::Black);
     m_startText->setOutlineColor(sf::Color::White);
     m_startText->setOutlineThickness(2);
-    m_startText->setString("Press SPACE to begin");
-    m_startText->setCharacterSize(64);
+    m_startText->setString(
+      "ARROW KEYS to high five\n"
+      "SPACE to jump\n"
+      "SPACE to lock jump meter\n\n"
+      "Press SPACE to begin"
+    );
+    m_startText->setCharacterSize(42);
     m_startText->setOrigin(m_startText->getLocalBounds().width * 0.5f, m_startText->getLocalBounds().height * 0.5f);
     m_startText->setPosition(viewSize * 0.5f);
 
