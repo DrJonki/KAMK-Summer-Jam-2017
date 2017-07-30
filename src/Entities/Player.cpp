@@ -44,8 +44,8 @@ namespace jam
         ins,
         "Particles/beersplash.png",
         sf::Vector2f(25, 25),
-        5,
-        0.25f,
+        15,
+        0.35f,
         0.50f,
         1.55f,
         0.5f,
@@ -59,7 +59,7 @@ namespace jam
         "Particles/highfiveeffect.png",
         sf::Vector2f(25, 25),
         200,
-        0.f,
+        8.f,
         1.50f,
         2.75f,
         0.5f,
@@ -68,7 +68,7 @@ namespace jam
         200.f,
         0.f
       ),
-      m_bottleSound(ins.resourceManager.GetSoundBuffer("Yeah.wav")),
+      m_bottleSound(ins.resourceManager.GetSoundBuffer("bottleSound.wav")),
       m_finalJumpSound(ins.resourceManager.GetSoundBuffer("FinalJump.wav")),
       m_arrow(ins.resourceManager.GetTexture("arrow.png")),
       m_arrowBar(ins.resourceManager.GetTexture("arrowBar.png")),
@@ -144,7 +144,7 @@ namespace jam
           }
         }
 
-        m_arrow_speed = 1250.f - m_currentSpeed.x;
+        m_arrow_speed = 1650.f - m_currentSpeed.x;
         break;
       }
 
@@ -297,14 +297,14 @@ namespace jam
     m_justJumped = true;
     m_rotationSpeed = 180.f;
 
-    m_jumpParticle.emit();
-
     if (arrowFail) {
       m_failSound.play();
       m_currentSpeed *= 0.075f;
+      m_jumpFailed = true;
     }
     else
     {
+      m_jumpParticle.emit();
       m_currentSpeed *= ratio;
       m_finalJumpSound.play();
     }

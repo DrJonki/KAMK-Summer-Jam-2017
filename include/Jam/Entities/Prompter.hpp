@@ -36,6 +36,7 @@ namespace jam
     sf::Sprite m_indicator;
     sf::Sound m_clapSound;
     ParticleEmitter m_bottleParticle;
+    ParticleEmitter m_flyingBottle;
     Randomizer m_random;
     sf::Vector2f m_playerPos;
     float m_playerPosOffset;

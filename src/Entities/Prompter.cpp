@@ -55,8 +55,8 @@ namespace jam
         ins, // instance
         "Particles/highfiveeffect.png", // texturePath
         sf::Vector2f(25, 25), // textureSize
-        20, // maxParticles
-        0.35f, // emitTime (if (x < 0.f) it is set to be forever
+        30, // maxParticles
+        0.45f, // emitTime (if (x < 0.f) it is set to be forever
         1.50f, // lifeTime
         2.75f, // startspeed
         0.5f, // friction
@@ -64,11 +64,25 @@ namespace jam
         10.f, // startTorgue
         200.f, // maxAlpha
         0.f // minAlpha
+      ),
+      m_flyingBottle(
+        ins, // instance
+        "Particles/highfiveeffect.png", // texturePath
+        sf::Vector2f(25, 25), // textureSize
+        1, // maxParticles
+        0.f, // emitTime (if (x < 0.f) it is set to be forever
+        1.50f, // lifeTime
+        2.75f, // startspeed
+        0.5f, // friction
+        0.f, // startAngle
+        10.f, // startTorgue
+        255.f, // maxAlpha
+        255.f // minAlpha
       )
   {
     setTexture(ins.resourceManager.GetTexture(getPromptTexture(m_key, true)));
     setOrigin(getLocalBounds().width * 0.5f, getLocalBounds().height);
-    setScale(2.f, 2.f);
+    setScale(2.5f, 2.5f);
 
     m_indicator.setOrigin(
       m_indicator.getLocalBounds().width / 2,
@@ -80,8 +94,9 @@ namespace jam
   void Prompter::setSuccess()
   {
     m_bottleParticle.emit();
+    m_flyingBottle.emit();
     float pitch = 1 + (m_random(-0.3f, 0.3f));
-    m_playerPosOffset = m_random(-30, 30);
+    m_playerPosOffset = m_random(-60, -10);
     m_clapSound.setPitch(pitch);
     m_clapSound.play();
     m_indicator.setScale(1.5f, 1.5f);
@@ -125,8 +140,8 @@ namespace jam
 
       const float endX = (m_playerPos.x + getLocalBounds().width + m_playerPosOffset);
       setPosition(
-        lerp(dt, getPosition().x, endX),
-        lerp(dt, getPosition().y, getPosition().y)
+        lerp(dt*3, getPosition().x, endX),
+        lerp(dt*3, getPosition().y, getPosition().y)
       );
 
       if (m_indicator.getScale().x > 0.f)

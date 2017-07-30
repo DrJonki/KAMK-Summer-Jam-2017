@@ -111,9 +111,14 @@ namespace jam
     const auto stageAmount = ins.config.integer("NUM_X_STAGES");
     
     // Prompters
-    for (int i = 1u; i < stageAmount; ++i) {
+    const auto prompterAmount = ins.config.integer("PROMPTER_AMOUNT");
+    float lastPos = (viewSize.x / 2);
+    for (int i = 1u; i < prompterAmount; ++i) {
       auto& prompter = m_pickupLayer.insert<Prompter>("Prompter", ins);
-      prompter.setPosition(i * viewSize.x, groundLevel);
+      Randomizer rand;
+      const float xPos = lastPos + (viewSize.x / rand(1.75f, 3.f));
+      prompter.setPosition(xPos, groundLevel + 10);
+      lastPos = xPos;
     }
 
     // Bottles
