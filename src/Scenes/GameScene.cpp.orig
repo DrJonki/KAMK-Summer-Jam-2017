@@ -121,7 +121,7 @@ namespace jam
     for (int i = 1u; i < prompterAmount; ++i) {
       auto& prompter = m_pickupLayer.insert<Prompter>("Prompter", ins);
       Randomizer rand;
-      const float xPos = lastPos + (viewSize.x / rand(1.f, 2.25f));
+      const float xPos = lastPos + (viewSize.x / rand(1.75f, 3.f));
       prompter.setPosition(xPos, groundLevel + 10);
       lastPos = xPos;
     }
@@ -292,7 +292,6 @@ namespace jam
       {
         m_score += 10;
         m_isScreenShakeActive = true;
-        m_runMusic.setPitch(1.f + m_player->getHandsSlapped()/20.f);
       }
       if (prompter.success() && getState() != State::Jumped)
       {
@@ -345,6 +344,7 @@ namespace jam
     return m_started;
   }
 
+<<<<<<< HEAD
   void GameScene::screenShake(const float dt)
   {
     if (m_isScreenShakeActive)
@@ -368,6 +368,7 @@ namespace jam
     }
   }
 
+=======
   void GameScene::updateScores()
   {
     std::string str = "Highscores\n";
@@ -475,4 +476,5 @@ namespace jam
       m_nameText = current;
     }
   }
+>>>>>>> a6d453e3293ead1c0c232cd72a174838521b1305
 }

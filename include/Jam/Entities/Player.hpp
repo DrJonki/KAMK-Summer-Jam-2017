@@ -26,6 +26,8 @@ namespace jam
 
     bool jump();
 
+    int getHandsSlapped();
+
     bool isStopped() const;
 
     bool collide(Bottle& bottle);
@@ -42,6 +44,7 @@ namespace jam
     ParticleEmitter m_runParticle;
     ParticleEmitter m_jumpParticle;
 
+    int m_slaps;
     float m_rotationSpeed;
     bool m_stopped;
     bool m_justJumped;

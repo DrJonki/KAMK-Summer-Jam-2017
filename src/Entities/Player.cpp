@@ -16,7 +16,7 @@ namespace jam
         16,
         16,
         3,
-        0.05f
+        0.15f
       ),
       m_instance(ins),
       m_random(),
@@ -68,6 +68,7 @@ namespace jam
         200.f,
         0.f
       ),
+      m_slaps(0),
       m_bottleSound(ins.resourceManager.GetSoundBuffer("bottleSound.wav")),
       m_finalJumpSound(ins.resourceManager.GetSoundBuffer("FinalJump.wav")),
       m_arrow(ins.resourceManager.GetTexture("arrow.png")),
@@ -103,6 +104,11 @@ namespace jam
     m_arrowBar.setColor(sf::Color(255, 255, 255, 100));
   }
 
+  int Player::getHandsSlapped()
+  {
+    return m_slaps;
+  }
+
   void Player::update(const float dt)
   {
     using sf::Keyboard;
@@ -124,7 +130,7 @@ namespace jam
       case GameScene::State::Running:
       {
         m_runSound.setVolume(100.f);
-
+        AnimatedSprite::setSpeed(0.05f + (0.10f / std::max(1, m_slaps)));
         m_currentSpeed.y += gravity * dt;
 
         if (getPosition().y >= viewY - ground - 1.f) {
@@ -271,7 +277,7 @@ namespace jam
     if (!prompter.success() && modifyRect(prompter.getGlobalBounds()).intersects(modifyRect(getGlobalBounds()))) {
       if (sf::Keyboard::isKeyPressed(prompter.promptKey())) {
         static const auto accel = m_instance.config.float_("PLAYER_ACCELERATION");
-
+        m_slaps += 1;
         m_currentSpeed.x += accel;
         prompter.setSuccess();
 
@@ -286,10 +292,10 @@ namespace jam
   {
     static const float jumpX = m_instance.config.float_("PLAYER_FINAL_JUMP_X");
     static const float jumpY = m_instance.config.float_("PLAYER_FINAL_JUMP_Y");
+    static const float slapAmount = m_instance.config.float_("PROMPTER_AMOUNT");
 
     const float range = std::abs(m_arrow_angle_min - m_arrow_angle_max);
     const float ratio = 1.f - std::abs(std::abs(m_arrow_angle) - range * 0.5f) / (range * 0.5f);
-    // const float ratio = (range * 0.5f) / (std::abs(m_arrow_angle - (range * 0.5f)));
     const float arrowFail = !m_arrow_locked || ratio < 0.1f;
 
     m_currentSpeed.x = jumpX;
@@ -305,7 +311,7 @@ namespace jam
     else
     {
       m_jumpParticle.emit();
-      m_currentSpeed *= ratio;
+      m_currentSpeed *= std::min((ratio * (std::max(m_slaps, 1) / slapAmount)) * 1.25f, 1.f);
       m_finalJumpSound.play();
     }
 

@@ -46,9 +46,9 @@ set(SRC
 )
 
 add_executable(Jam ${SRC})
-add_dependencies(Jam SFML)
+add_dependencies(Jam SFML GLM JSON CURL)
 
-add_definitions(-DSFML_STATIC)
+add_definitions(-DSFML_STATIC -DCURL_STATICLIB)
 
 if (MSVC)
   ExternalProject_Get_Property(SFML BINARY_DIR)
@@ -68,6 +68,15 @@ if (MSVC)
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-system-s.lib
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-window-s.lib
   )
+  ExternalProject_Get_Property(CURL BINARY_DIR)
+  target_link_libraries(Jam
+    # Curl libs
+    debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/libcurl-d.lib
+  )
+  target_link_libraries(Jam
+    # Curl libs
+    optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/libcurl.lib
+  )
 
   target_link_libraries(Jam
     # SFML dependencies
@@ -84,6 +93,9 @@ if (MSVC)
     opengl32.lib
     winmm.lib
     gdi32.lib
+    ws2_32.lib
+    Wldap32.lib
+    crypt32.lib
   )
 
   set_target_properties(Jam PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")

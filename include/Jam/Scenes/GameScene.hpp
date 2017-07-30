@@ -21,6 +21,8 @@ namespace jam
       Jumped,
     };
 
+    void textEvent(const uint32_t code) override;
+
   public:
 
     GameScene(Instance& ins);
@@ -33,8 +35,11 @@ namespace jam
 
   private:
 
+    void updateScores();
+
     State m_currentState;
     bool m_started;
+    bool m_sendingScore;
 
     // Sounds
     sf::Music m_runMusic;
@@ -55,6 +60,8 @@ namespace jam
     Text* m_scoreText;
     Text* m_startText;
     Text* m_endText;
+    Text* m_leaderText;
+    sf::String m_nameText;
     int m_score;
     int m_scoreExtra;
 
