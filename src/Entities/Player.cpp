@@ -150,7 +150,7 @@ namespace jam
           }
         }
 
-        m_arrow_speed = 1650.f - m_currentSpeed.x;
+        m_arrow_speed = std::max(1450.f - m_currentSpeed.x, 1.f);
         break;
       }
 
