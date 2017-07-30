@@ -3,6 +3,7 @@
 #include <SFML/Window/Event.hpp>
 #include <rapidjson/document.h>
 #include <curl/curl.h>
+#include <iostream>
 #include <string>
 
 sf::VideoMode getVideomode(const jam::ConfigManager& config) {
@@ -108,6 +109,16 @@ namespace jam
       case sf::Event::TextEntered:
       {
         currentScene->textEvent(event.text.unicode);
+        break;
+      }
+      case sf::Event::JoystickButtonPressed:
+      {
+        std::cout << "Button: " << event.joystickButton.button << std::endl;
+        break;
+      }
+      case sf::Event::JoystickMoved:
+      {
+        std::cout << "Axis: " << event.joystickMove.axis << ": " << event.joystickMove.position << std::endl;
         break;
       }
       }
