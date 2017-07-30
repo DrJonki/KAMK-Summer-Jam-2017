@@ -3,6 +3,7 @@
 #include <SFML/Window/Event.hpp>
 #include <rapidjson/document.h>
 #include <curl/curl.h>
+#include <iostream>
 #include <string>
 
 sf::VideoMode getVideomode(const jam::ConfigManager& config) {
@@ -110,6 +111,16 @@ namespace jam
         currentScene->textEvent(event.text.unicode);
         break;
       }
+      case sf::Event::JoystickButtonPressed:
+      {
+        std::cout << "Button: " << event.joystickButton.button << std::endl;
+        break;
+      }
+      case sf::Event::JoystickMoved:
+      {
+        std::cout << "Axis: " << event.joystickMove.axis << ": " << event.joystickMove.position << std::endl;
+        break;
+      }
       }
     }
   }
@@ -133,7 +144,7 @@ namespace jam
 
       curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 
-      curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
+      curl_easy_setopt(curl, CURLOPT_TIMEOUT, 15L);
 
       curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
       curl_easy_setopt(curl, CURLOPT_WRITEDATA, &res);

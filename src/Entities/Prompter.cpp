@@ -118,6 +118,33 @@ namespace jam
     return m_key;
   }
 
+  int Prompter::promptValue() const
+  {
+    switch (promptKey())
+    {
+    case sf::Keyboard::Up:
+        return -100;
+    case sf::Keyboard::Down:
+      return 100;
+    case sf::Keyboard::Left:
+      return -100;
+    default:
+      return 100;
+    }
+  }
+
+  int Prompter::promptAxis() const
+  {
+    switch (promptKey())
+    {
+      case sf::Keyboard::Up:
+      case sf::Keyboard::Down:
+        return 1;
+
+      default: return 0;
+    }
+  }
+
   void Prompter::update(const float dt)
   {
     if (!m_success)

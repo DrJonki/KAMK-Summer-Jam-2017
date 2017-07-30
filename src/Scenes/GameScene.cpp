@@ -6,6 +6,7 @@
 #include <Jam/Entities/Prompter.hpp>
 #include <Jam/Entities/Text.hpp>
 #include <Jam/Entities/BackgroundSprite.hpp>
+#include <SFML/Window/Joystick.hpp>
 #include <Jam/Randomizer.hpp>
 #include <SFML/Network.hpp>
 #include <iostream>
@@ -167,8 +168,13 @@ namespace jam
     m_startText->setFillColor(sf::Color::Black);
     m_startText->setOutlineColor(sf::Color::White);
     m_startText->setOutlineThickness(2);
-    m_startText->setString("Press SPACE to begin");
-    m_startText->setCharacterSize(64);
+    m_startText->setString(
+      "ARROW KEYS to high five\n"
+      "SPACE(A|B) to jump\n"
+      "SPACE(A|B) to lock jump\n\n"
+      "Press SPACE(ENTER) to begin"
+    );
+    m_startText->setCharacterSize(42);
     m_startText->setOrigin(m_startText->getLocalBounds().width * 0.5f, m_startText->getLocalBounds().height * 0.5f);
     m_startText->setPosition(viewSize * 0.5f);
 
@@ -193,6 +199,7 @@ namespace jam
   void GameScene::update(const float dt)
   {
     using sf::Keyboard;
+    using sf::Joystick;
 
     Scene::update(dt);
     const auto& conf = getInstance().config;
@@ -225,7 +232,7 @@ namespace jam
     const int currentStageX = static_cast<unsigned int>((view.getCenter().x + (conf.float_("VIEW_X") * 0.5f)) / conf.float_("VIEW_X"));
     const int currentStageY = std::abs(static_cast<int>((view.getCenter().y - (conf.float_("VIEW_Y") * 0.5f)) / conf.float_("VIEW_Y")));
     const bool inSky = currentStageY > 0;
-    std::cout << "Stage: [" << currentStageX << ", " << currentStageY << "]" << std::setw(10) << "\r";
+    //std::cout << "Stage: [" << currentStageX << ", " << currentStageY << "]" << std::setw(10) << "\r";
 
     BackgroundSprite* bgs[] = {
       static_cast<BackgroundSprite*>(m_backgroundLayer.get("bg-sky-tl")),
@@ -307,7 +314,7 @@ namespace jam
     // Stats
     m_scoreText->setString("Score: " + std::to_string(m_score + m_scoreExtra));
 
-    if (Keyboard::isKeyPressed(Keyboard::Space)) {
+    if (Keyboard::isKeyPressed(Keyboard::Space) || Joystick::isButtonPressed(0, 9)) {
       m_startText->setActive(false);
       m_started = true;
     }
@@ -325,11 +332,11 @@ namespace jam
       m_endText->setActive(true);
       m_endText->setString(
         "Final score: " + std::to_string(m_score + m_scoreExtra) +
-        "\n\nPress R to jump again"
+        "\n\nPress R(SELECT) to jump again"
         "\n\nType your name and press\n"
         "ENTER to submit score\n> " + m_nameText);
 
-      if (Keyboard::isKeyPressed(Keyboard::R)) {
+      if (Keyboard::isKeyPressed(Keyboard::R) || Joystick::isButtonPressed(0, 8)) {
         getInstance().currentScene = std::make_unique<GameScene>(getInstance());
       }
     }

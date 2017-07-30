@@ -143,7 +143,7 @@ namespace jam
             m_jumpPressed = false;
           }
           // jump input
-          if (Keyboard::isKeyPressed(Keyboard::Space))
+          if (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0, 1) || sf::Joystick::isButtonPressed(0, 2))
           {
               m_currentSpeed.y = -jumpForce;
               m_jumpPressed = true;
@@ -167,7 +167,7 @@ namespace jam
         );
         m_currentSpeed = sf::Vector2f();
 
-        if (Keyboard::isKeyPressed(Keyboard::Space))
+        if (Keyboard::isKeyPressed(Keyboard::Space) || sf::Joystick::isButtonPressed(0, 1) || sf::Joystick::isButtonPressed(0, 2))
         {
           m_arrow_locked = true;
         }
@@ -275,7 +275,7 @@ namespace jam
   bool Player::collide(Prompter& prompter)
   {
     if (!prompter.success() && modifyRect(prompter.getGlobalBounds()).intersects(modifyRect(getGlobalBounds()))) {
-      if (sf::Keyboard::isKeyPressed(prompter.promptKey())) {
+      if (sf::Keyboard::isKeyPressed(prompter.promptKey()) || sf::Joystick::getAxisPosition(0, static_cast<sf::Joystick::Axis>(prompter.promptAxis())) == prompter.promptValue()) {
         static const auto accel = m_instance.config.float_("PLAYER_ACCELERATION");
         m_slaps += 1;
         m_currentSpeed.x += accel;
