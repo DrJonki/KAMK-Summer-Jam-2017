@@ -7,6 +7,7 @@
 #include <Jam/Entities/Text.hpp>
 #include <Jam/Entities/BackgroundSprite.hpp>
 #include <Jam/Randomizer.hpp>
+#include <SFML/Network.hpp>
 #include <iostream>
 #include <iomanip>
 
@@ -17,6 +18,7 @@ namespace jam
 
     m_currentState(State::Running),
     m_started(false),
+    m_sendingScore(false),
 
     // Sounds
     m_runMusic(),
@@ -150,7 +152,7 @@ namespace jam
     m_scoreText->setFillColor(sf::Color::Black);
     m_scoreText->setOutlineColor(sf::Color::White);
     m_scoreText->setOutlineThickness(2);
-    m_scoreText->move(5, 0);
+    m_scoreText->move(10, 0);
 
     m_startText = &m_uiLayer.insert<Text>("StartText");
     m_startText->setFont(font);
@@ -167,6 +169,15 @@ namespace jam
     m_endText->setFillColor(sf::Color::Black);
     m_endText->setOutlineColor(sf::Color::White);
     m_endText->setOutlineThickness(2);
+    m_endText->setPosition(10, 0);
+
+    m_leaderText = &m_uiLayer.insert<Text>("NameText");
+    m_leaderText->setFont(font);
+    m_leaderText->setFillColor(sf::Color::Black);
+    m_leaderText->setOutlineColor(sf::Color::White);
+    m_leaderText->setCharacterSize(16);
+    m_leaderText->setOutlineThickness(2);
+    m_leaderText->setPosition(viewSize.x - 100, 0);
   }
 
   void GameScene::update(const float dt)
@@ -290,11 +301,13 @@ namespace jam
       ));
 
       m_endText->setActive(true);
-      m_endText->setString("Final score: " + std::to_string(m_score + m_scoreExtra) + "\n\nPress ENTER to jump again");
-      m_endText->setOrigin(m_endText->getLocalBounds().width * 0.5f, m_endText->getLocalBounds().height * 0.5f);
-      m_endText->setPosition(viewSize * 0.5f);
+      m_endText->setString(
+        "Final score: " + std::to_string(m_score + m_scoreExtra) +
+        "\n\nPress R to jump again"
+        "\n\nType your name and press\n"
+        "ENTER to submit score\n> " + m_nameText);
 
-      if (Keyboard::isKeyPressed(Keyboard::Return)) {
+      if (Keyboard::isKeyPressed(Keyboard::R)) {
         getInstance().currentScene = std::make_unique<GameScene>(getInstance());
       }
     }
@@ -310,4 +323,26 @@ namespace jam
     return m_started;
   }
 
+  void GameScene::textEvent(const uint32_t code)
+  {
+    if (m_player->isStopped()) {
+
+      if (code == 10 || code == 13) {
+        m_sendingScore = true;
+
+        return;
+      }
+
+      sf::String current = m_nameText;
+
+      if (code == '\b')
+        current = current.substring(0, current.getSize() - 1);
+      else {
+        if (current.getSize() < 8)
+          current += code;
+      }
+
+      m_nameText = current;
+    }
+  }
 }

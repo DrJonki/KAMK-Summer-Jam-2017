@@ -5,6 +5,7 @@
 #include <memory>
 #include <Jam/ResourceManager.hpp>
 #include <Jam/ConfigManager.hpp>
+#include <set>
 
 namespace jam
 {
@@ -30,6 +31,9 @@ namespace jam
     sf::RenderWindow window;
     std::unique_ptr<Scene> currentScene;
     ResourceManager resourceManager;
+    std::set<int, std::string> highscores;
+
+    const std::string apiKey;
 
   private:
 

@@ -266,7 +266,6 @@ namespace jam
 
     const float range = std::abs(m_arrow_angle_min - m_arrow_angle_max);
     const float ratio = 1.f - std::abs(std::abs(m_arrow_angle) - range * 0.5f) / (range * 0.5f);
-    // const float ratio = (range * 0.5f) / (std::abs(m_arrow_angle - (range * 0.5f)));
     const float arrowFail = !m_arrow_locked || ratio < 0.1f;
 
     m_currentSpeed.x = jumpX;

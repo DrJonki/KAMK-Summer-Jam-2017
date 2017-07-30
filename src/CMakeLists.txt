@@ -46,7 +46,7 @@ set(SRC
 )
 
 add_executable(Jam ${SRC})
-add_dependencies(Jam SFML)
+add_dependencies(Jam SFML GLM JSON CURL)
 
 add_definitions(-DSFML_STATIC)
 
@@ -59,6 +59,7 @@ if (MSVC)
     debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-main-d.lib
     debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-system-s-d.lib
     debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-window-s-d.lib
+    debug ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-network-s-d.lib
   )
   target_link_libraries(Jam
     # SFML libs
@@ -67,6 +68,7 @@ if (MSVC)
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-main.lib
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-system-s.lib
     optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-window-s.lib
+    optimized ${BINARY_DIR}/lib/${CMAKE_CFG_INTDIR}/sfml-network-s.lib
   )
 
   target_link_libraries(Jam
@@ -84,6 +86,7 @@ if (MSVC)
     opengl32.lib
     winmm.lib
     gdi32.lib
+    ws2_32.lib
   )
 
   set_target_properties(Jam PROPERTIES LINK_FLAGS_RELEASE "/SUBSYSTEM:WINDOWS")

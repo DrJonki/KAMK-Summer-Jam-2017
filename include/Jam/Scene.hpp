@@ -35,6 +35,8 @@ namespace jam
 
     const sf::View& getView() const;
 
+    virtual void textEvent(const uint32_t code);
+
   private:
 
     Instance& m_instance;

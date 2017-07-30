@@ -48,4 +48,10 @@ namespace jam
   {
     return m_view;
   }
+
+  void Scene::textEvent(const uint32_t code)
+  {
+
+  }
+
 }
