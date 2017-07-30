@@ -265,7 +265,11 @@ namespace jam
 
     // Collisions
     for (auto& i : m_pickupLayer.getAll("Prompter")) {
-      m_score += m_player->collide(*static_cast<Prompter*>(i)) * 10;
+      auto& prompter = *static_cast<Prompter*>(i);
+      m_score += m_player->collide(prompter) * 10;
+      if (prompter.success() && getState() != State::Jumped) {
+        prompter.setPlayerPos(m_player->getPosition());
+      }
     }
 
     for (auto& i : m_pickupLayer.getAll("Bottle")) {

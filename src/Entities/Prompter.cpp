@@ -70,6 +70,10 @@ namespace jam
     setOrigin(getLocalBounds().width * 0.5f, getLocalBounds().height);
     setScale(2.f, 2.f);
 
+    m_indicator.setOrigin(
+      m_indicator.getLocalBounds().width / 2,
+      m_indicator.getLocalBounds().height / 2
+    );
     m_indicator.setScale(0.75f, 0.75f);
   }
 
@@ -77,9 +81,16 @@ namespace jam
   {
     m_bottleParticle.emit();
     float pitch = 1 + (m_random(-0.3f, 0.3f));
+    m_playerPosOffset = m_random(-30, 30);
     m_clapSound.setPitch(pitch);
     m_clapSound.play();
+    m_indicator.setScale(1.5f, 1.5f);
     m_success = true;
+  }
+
+  void Prompter::setPlayerPos(sf::Vector2f pos)
+  {
+    m_playerPos = pos;
   }
 
   bool Prompter::success() const
@@ -94,14 +105,41 @@ namespace jam
 
   void Prompter::update(const float dt)
   {
-    const float floatRange = 6.f;
-    const float floatSpeed = 5.f;
-    const float floatOffset = -50.f;
+    if (!m_success)
+    {
+      const float floatRange = 6.f;
+      const float floatSpeed = 5.f;
+      const float floatOffset = -50.f;
 
-    m_indicator.setPosition(
-      0.f,
-      floatOffset + std::sin((m_timer += dt) * floatSpeed) * floatRange
-    );
+      m_indicator.setPosition(
+        m_indicator.getGlobalBounds().width / 2,
+        floatOffset + std::sin((m_timer += dt) * floatSpeed) * floatRange
+      );
+    }
+    else
+    {
+      const float rotAngle = 15.f;
+      const float rotSpeed = 5.f;
+
+      setRotation(std::sin((m_timer += dt) * rotSpeed) * rotAngle);
+
+      const float endX = (m_playerPos.x + getLocalBounds().width + m_playerPosOffset);
+      setPosition(
+        lerp(dt, getPosition().x, endX),
+        lerp(dt, getPosition().y, getPosition().y)
+      );
+
+      if (m_indicator.getScale().x > 0.f)
+      {
+        m_indicator.rotate(20.f);
+        m_indicator.setScale(
+          m_indicator.getScale().x - (dt * 4),
+          m_indicator.getScale().y - (dt * 4)
+        );
+      }
+      else
+        m_indicator.setScale(0.f, 0.f);
+    }
     m_bottleParticle.setPosition(sf::Vector2f(getPosition().x, getPosition().y - (getLocalBounds().height / 2)));
     m_bottleParticle.update(dt);
   }
@@ -114,4 +152,10 @@ namespace jam
     states.transform = getTransform();
     target.draw(m_indicator, states);
   }
+
+  float Prompter::lerp(float value, float start, float end)
+  {
+    return start + (end - start) * value;
+  }
+
 }

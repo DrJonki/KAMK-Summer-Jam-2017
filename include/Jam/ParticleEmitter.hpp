@@ -29,6 +29,7 @@ namespace jam
 
     void emit();
     void setPosition(sf::Vector2f emitPosition);
+    void setStartRotation(float rot);
     void stop();
 
     void update(const float dt) override;

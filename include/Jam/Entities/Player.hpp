@@ -40,6 +40,7 @@ namespace jam
 
     ParticleEmitter m_bottleParticle;
     ParticleEmitter m_runParticle;
+    ParticleEmitter m_jumpParticle;
 
     float m_rotationSpeed;
     bool m_stopped;

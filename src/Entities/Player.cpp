@@ -54,6 +54,20 @@ namespace jam
         100.f,
         0.f
       ),
+      m_jumpParticle(
+        ins,
+        "Particles/highfiveeffect.png",
+        sf::Vector2f(25, 25),
+        200,
+        0.f,
+        1.50f,
+        2.75f,
+        0.5f,
+        0.f,
+        10.f,
+        200.f,
+        0.f
+      ),
       m_bottleSound(ins.resourceManager.GetSoundBuffer("Yeah.wav")),
       m_finalJumpSound(ins.resourceManager.GetSoundBuffer("FinalJump.wav")),
       m_arrow(ins.resourceManager.GetTexture("arrow.png")),
@@ -85,6 +99,8 @@ namespace jam
     m_arrowBar.setOrigin(0, m_arrowBar.getLocalBounds().height / 2);
     m_arrow.setPosition(0, -1000);
     m_arrowBar.setPosition(0, -1000);
+    m_arrowBar.setColor(sf::Color(255, 255, 255, 75));
+    m_arrowBar.setColor(sf::Color(255, 255, 255, 100));
   }
 
   void Player::update(const float dt)
@@ -175,11 +191,13 @@ namespace jam
 
       case GameScene::State::Jumped:
       {
-        if (!m_justJumped) {
+        if (!m_justJumped) 
+        {
           m_currentSpeed.y += gravity * dt;
           m_currentSpeed.x = std::max(0.f, m_currentSpeed.x);
 
-          if (getPosition().y >= viewY - ground - 1.f) {
+          if (getPosition().y >= viewY - ground - 1.f) 
+          {
             m_currentSpeed.y *= -0.65f;
             m_currentSpeed.x *= 0.65f;
             m_rotationSpeed += 90.f;
@@ -187,12 +205,16 @@ namespace jam
             m_ouchSound.play();
           }
 
-          if (m_currentSpeed.y < 50.f && m_currentSpeed.x < 50.f) {
+          if (m_currentSpeed.y < 50.f && m_currentSpeed.x < 50.f) 
+          {
             m_stopped = true;
             m_splashSound.play();
           }
         }
         m_justJumped = false;
+        m_jumpParticle.setPosition(getPosition());
+        m_jumpParticle.setStartRotation(m_random(0.f, 360.f));
+        m_jumpParticle.update(dt);
       }
       }
     }
@@ -216,10 +238,11 @@ namespace jam
   {
     if (!isStopped()) {
       target.draw(*this);
-    target.draw(m_arrowBar);
-    target.draw(m_arrow);
+      target.draw(m_arrowBar);
+      target.draw(m_arrow);
       m_runParticle.draw(target);
-    m_bottleParticle.draw(target);
+      m_bottleParticle.draw(target);
+      m_jumpParticle.draw(target);
     }
   }
 
@@ -273,6 +296,8 @@ namespace jam
     m_currentSpeed.y = -jumpY;
     m_justJumped = true;
     m_rotationSpeed = 180.f;
+
+    m_jumpParticle.emit();
 
     if (arrowFail) {
       m_failSound.play();
