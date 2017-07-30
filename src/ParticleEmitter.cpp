@@ -44,6 +44,11 @@ namespace jam
     m_emitPosition = emitPosition;
   }
 
+  void ParticleEmitter::setStartRotation(float rot)
+  {
+    m_startAngle = rot;
+  }
+
   void ParticleEmitter::stop()
   {
     isStartedEmitting = false;
